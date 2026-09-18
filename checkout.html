@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>إتمام الطلب | NIVORA</title>
+    <link rel="stylesheet" href="assets/css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;600;700&family=Cairo:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <style>
+        .checkout-layout { display: grid; grid-template-columns: 2fr 1fr; gap: 30px; padding: 40px 5%; }
+        .checkout-form { background: var(--bg-card); border: 1px solid #1a1a1a; border-radius: 8px; padding: 30px; }
+        .checkout-form h3 { color: var(--gold); margin-bottom: 25px; font-family: var(--font-heading); }
+        .form-group { margin-bottom: 20px; }
+        .form-group label { display: block; margin-bottom: 8px; color: var(--text-light); }
+        .form-group input, .form-group select, .form-group textarea {
+            width: 100%; padding: 12px; background: var(--bg-surface);
+            border: 1px solid #333; color: white; border-radius: 5px;
+            font-family: var(--font-body);
+        }
+        .form-group input:focus, .form-group select:focus { border-color: var(--gold); outline: none; }
+        .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+        .payment-methods { display: flex; flex-direction: column; gap: 15px; margin-top: 20px; }
+        .payment-method { display: flex; align-items: center; gap: 15px; padding: 15px; background: var(--bg-surface); border: 1px solid #333; border-radius: 5px; cursor: pointer; transition: var(--transition); }
+        .payment-method:hover, .payment-method.active { border-color: var(--gold); }
+        .payment-method input { accent-color: var(--gold); }
+        .order-summary { background: var(--bg-card); border: 1px solid #1a1a1a; border-radius: 8px; padding: 25px; height: fit-content; position: sticky; top: 100px; }
+        .order-summary h3 { color: var(--gold); margin-bottom: 20px; font-family: var(--font-heading); }
+        .summary-item { display: flex; justify-content: space-between; padding: 10px 0; border-bottom: 1px solid #1a1a1a; font-size: 0.9rem; }
+        .summary-item.total { font-size: 1.2rem; font-weight: bold; color: var(--gold); border-bottom: none; padding-top: 15px; border-top: 1px solid var(--border); }
+        .paypal-btn { background: #0070BA; color: white; padding: 15px; border-radius: 5px; text-align: center; display: block; margin-top: 20px; font-weight: bold; transition: var(--transition); }
+        .paypal-btn:hover { background: #005c99; }
+        @media (max-width: 768px) {
+            .checkout-layout { grid-template-columns: 1fr; padding: 20px; }
+            .form-row { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="header-left">
+            <div class="logo">
+                <a href="index.html">
+                    <span class="logo-text">NIVORA</span>
+                    <span class="logo-sub">SILVER</span>
+                </a>
+            </div>
+        </div>
+        <div class="header-right">
+            <span class="lang-switch">AR | EN</span>
+        </div>
+    </header>
+
+    <main>
+        <div class="page-header" style="padding: 40px 5%;">
+            <h1>إتمام الطلب</h1>
+            <div class="breadcrumb">
+                <a href="index.html">الرئيسية</a> / <a href="cart.html">السلة</a> / <span>الدفع</span>
+            </div>
+        </div>
+
+        <div class="checkout-layout">
+            <!-- Form -->
+            <div class="checkout-form">
+                <h3><i class="fa-solid fa-user"></i> معلومات الشحن</h3>
+                <form id="checkout-form">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>الاسم الكامل *</label>
+                            <input type="text" required placeholder="أدخل اسمك">
+                        </div>
+                        <div class="form-group">
+                            <label>رقم الهاتف *</label>
+                            <input type="tel" required placeholder="01xxxxxxxxx">
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>الدولة *</label>
+                            <select required>
+                                <option value="EG">مصر</option>
+                                <option value="SA">السعودية</option>
+                                <option value="AE">الإمارات</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>المدينة *</label>
+                            <input type="text" required placeholder="أدخل مدينتك">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label>العنوان بالتفصيل *</label>
+                        <textarea rows="3" required placeholder="الشارع، رقم المبنى، علامة مميزة"></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label>ملاحظات الطلب (اختياري)</label>
+                        <textarea rows="2" placeholder="أي ملاحظات إضافية"></textarea>
+                    </div>
+
+                    <h3 style="margin-top: 30px;"><i class="fa-solid fa-credit-card"></i> طريقة الدفع</h3>
+                    <div class="payment-methods">
+                        <label class="payment-method active">
+                            <input type="radio" name="payment" value="paypal" checked>
+                            <i class="fa-brands fa-paypal" style="color: #0070BA; font-size: 1.5rem;"></i>
+                            <span>الدفع عبر PayPal</span>
+                        </label>
+                        <label class="payment-method">
+                            <input type="radio" name="payment" value="cod">
+                            <i class="fa-solid fa-money-bill-wave" style="color: var(--gold); font-size: 1.5rem;"></i>
+                            <span>الدفع عند الاستلام</span>
+                        </label>
+                    </div>
+
+                    <button type="submit" class="btn-gold" style="width: 100%; margin-top: 30px; padding: 15px;">
+                        <i class="fa-solid fa-lock"></i> تأكيد الطلب والدفع
+                    </button>
+                    <a href="#" class="paypal-btn" onclick="alert('سيتم تحويلك إلى PayPal لإتمام الدفع بحساب florintoursim@gmail.com'); return false;">
+                        <i class="fa-brands fa-paypal"></i> الدفع السريع عبر PayPal
+                    </a>
+                </form>
+            </div>
+
+            <!-- Order Summary -->
+            <div class="order-summary">
+                <h3>ملخص الطلب</h3>
+                <div id="checkout-items"></div>
+                <div class="summary-item total">
+                    <span>الإجمالي</span>
+                    <span id="checkout-total">0 ر.س</span>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <footer>
+        <div class="footer-bottom" style="padding-top: 40px;">
+            © 2025 NIVORA SILVER. جميع الحقوق محفوظة.
+        </div>
+    </footer>
+
+    <script src="assets/js/products.js"></script>
+    <script src="assets/js/main.js"></script>
+    <script src="assets/js/cart.js"></script>
+    <script>
+        // عرض ملخص الطلب
+        document.addEventListener('DOMContentLoaded', () => {
+            const cart = getCart();
+            const container = document.getElementById('checkout-items');
+            let html = '';
+            cart.forEach(item => {
+                html += `
+                    <div class="summary-item">
+                        <span>${item.nameAr} × ${item.quantity}</span>
+                        <span>${item.price * item.quantity} ر.س</span>
+                    </div>
+                `;
+            });
+            container.innerHTML = html;
+            document.getElementById('checkout-total').textContent = `${calculateTotal()} ر.س`;
+        });
+
+        // منع الإرسال الفعلي (محاكاة)
+        document.getElementById('checkout-form').addEventListener('submit', (e) => {
+            e.preventDefault();
+            alert('تم استلام طلبك بنجاح! سيتم التواصل معك قريباً.\n\nملاحظة: هذا نموذج تجريبي. لتفعيل الدفع الحقيقي، يجب ربط بوابة PayPal بالحساب florintoursim@gmail.com.');
+            localStorage.removeItem('nivora_cart');
+            window.location.href = 'index.html';
+        });
+    </script>
+</body>
+</html>
