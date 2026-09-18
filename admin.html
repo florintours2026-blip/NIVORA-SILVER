@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <title>لوحة الإدارة | AUREVIA</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;600&family=Playfair+Display:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        .admin-container { display: flex; height: 100vh; }
+        .sidebar { width: 250px; background: #111; padding: 30px; border-left: 1px solid #222; }
+        .sidebar h2 { color: var(--gold); font-family: var(--font-heading); margin-bottom: 30px; }
+        .sidebar ul { list-style: none; }
+        .sidebar ul li { padding: 15px 0; color: var(--text-gray); cursor: pointer; border-bottom: 1px solid #222; }
+        .sidebar ul li:hover { color: var(--gold); }
+        
+        .main-content { flex: 1; padding: 40px; overflow-y: auto; background: #0B0B0B; }
+        .main-content h1 { color: var(--gold); font-family: var(--font-heading); margin-bottom: 30px; }
+        
+        .import-form { background: #1A1A1A; padding: 30px; border-radius: 10px; border: 1px solid #333; max-width: 800px; }
+        .import-form label { display: block; margin-bottom: 10px; color: var(--text-gray); }
+        .import-form input, .import-form select {
+            width: 100%; padding: 15px; margin-bottom: 20px; background: #0B0B0B; border: 1px solid #333; color: white; border-radius: 5px;
+        }
+        .import-form input:focus { border-color: var(--gold); outline: none; }
+        .import-form button { width: auto; padding: 15px 40px; }
+        
+        .product-list { margin-top: 40px; }
+        .product-item { display: flex; justify-content: space-between; align-items: center; background: #1A1A1A; padding: 15px; margin-bottom: 10px; border-radius: 5px; border: 1px solid #222; }
+        .product-item span { color: var(--text-white); }
+        .product-item .price { color: var(--gold); font-weight: bold; }
+    </style>
+</head>
+<body>
+
+<div class="admin-container">
+    <!-- الشريط الجانبي -->
+    <div class="sidebar">
+        <h2>AUREVIA Admin</h2>
+        <ul>
+            <li>لوحة التحكم</li>
+            <li>إدارة المنتجات</li>
+            <li>الاستيراد الذكي (Dropshipping)</li>
+            <li>الطلبات</li>
+            <li>المخزون</li>
+            <li>الإعدادات</li>
+        </ul>
+        <a href="index.html" style="display:block; margin-top:50px; color:var(--gold); text-decoration:none;">← العودة للمتجر</a>
+    </div>
+
+    <!-- المحتوى الرئيسي -->
+    <div class="main-content">
+        <h1>نظام الاستيراد الذكي</h1>
+        
+        <div class="import-form">
+            <label>رابط المنتج (AliExpress / Amazon / Alibaba)</label>
+            <input type="text" id="product-url" placeholder="https://www.aliexpress.com/item/...">
+            
+            <label>سعر المنتج الأساسي (بالدولار)</label>
+            <input type="number" id="base-price" placeholder="مثال: 50">
+            
+            <label>رسوم التوصيل (بالدولار)</label>
+            <input type="number" id="shipping-cost" placeholder="مثال: 10">
+            
+            <label>نسبة الربح المضافة (%)</label>
+            <select id="profit-margin">
+                <option value="10">10%</option>
+                <option value="20">20%</option>
+                <option value="50">50%</option>
+                <option value="100">100%</option>
+            </select>
+            
+            <button class="btn-primary" onclick="importProduct()">استيراد المنتج</button>
+        </div>
+
+        <div class="product-list" id="admin-product-list">
+            <h3 style="color:var(--gold); margin-bottom:15px;">المنتجات المستوردة</h3>
+            <!-- سيتم عرض المنتجات هنا -->
+        </div>
+    </div>
+</div>
+
+<script src="script.js"></script>
+</body>
+</html>
