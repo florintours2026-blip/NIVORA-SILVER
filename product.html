@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>تفاصيل المنتج | NIVORA</title>
+    <link rel="stylesheet" href="assets/css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;600;700&family=Cairo:wght@300;400;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+
+    <!-- ===== HEADER ===== -->
+    <header>
+        <div class="header-left">
+            <div class="logo">
+                <a href="index.html">
+                    <span class="logo-text">NIVORA</span>
+                    <span class="logo-sub">SILVER</span>
+                </a>
+            </div>
+            <nav>
+                <ul>
+                    <li><a href="index.html">الرئيسية</a></li>
+                    <li><a href="shop.html">المتجر</a></li>
+                    <li><a href="jewelry.html">الفضة والمجوهرات</a></li>
+                    <li><a href="perfumes.html">العطور</a></li>
+                    <li><a href="watches.html">الساعات</a></li>
+                    <li><a href="sunglasses.html">النظارات الشمسية</a></li>
+                </ul>
+            </nav>
+        </div>
+        <div class="header-right">
+            <i class="fa-solid fa-magnifying-glass"></i>
+            <i class="fa-regular fa-user"></i>
+            <a href="cart.html" style="position: relative;">
+                <i class="fa-solid fa-cart-shopping"></i>
+                <span class="cart-count" id="cart-count">0</span>
+            </a>
+            <span class="lang-switch">AR | EN</span>
+        </div>
+    </header>
+
+    <!-- ===== PRODUCT DETAILS ===== -->
+    <main class="product-page">
+        <div class="container">
+            <!-- Breadcrumb -->
+            <div class="breadcrumb" style="padding: 20px 0; color: var(--text-gray); font-size: 0.9rem;">
+                <a href="index.html" style="color: var(--text-gray);">الرئيسية</a> / 
+                <a href="shop.html" style="color: var(--text-gray);">المتجر</a> / 
+                <span id="breadcrumb-product" style="color: var(--gold);">تفاصيل المنتج</span>
+            </div>
+
+            <div class="product-detail-layout">
+                <!-- Gallery (Left) -->
+                <div class="product-gallery">
+                    <!-- Thumbnails -->
+                    <div class="thumbnail-list" id="thumbnail-list">
+                        <!-- سيتم تحميلها بواسطة JS -->
+                    </div>
+                    <!-- Main Image -->
+                    <div class="main-image-container">
+                        <img id="main-image" src="" alt="Product Image">
+                        <i class="fa-solid fa-expand" id="fullscreen-btn" title="تكبير"></i>
+                    </div>
+                </div>
+
+                <!-- Info (Right) -->
+                <div class="product-info">
+                    <p class="product-category" id="product-category">القسم</p>
+                    <h1 class="product-title" id="product-title">اسم المنتج</h1>
+                    
+                    <div class="product-rating">
+                        <span id="product-rating">★★★★★</span>
+                        <span style="color: var(--text-gray);" id="product-reviews">(0 تقييم)</span>
+                    </div>
+
+                    <div class="product-price-box">
+                        <span class="current-price" id="product-price">0 ر.س</span>
+                        <span class="old-price" id="product-old-price"></span>
+                        <span class="discount-badge" id="product-discount"></span>
+                    </div>
+
+                    <p class="product-description" id="product-description">
+                        وصف المنتج...
+                    </p>
+
+                    <!-- Quantity -->
+                    <div class="quantity-selector">
+                        <label>الكمية:</label>
+                        <button class="qty-btn" id="qty-minus">-</button>
+                        <input type="number" id="qty-input" value="1" min="1" max="99">
+                        <button class="qty-btn" id="qty-plus">+</button>
+                    </div>
+
+                    <!-- Actions -->
+                    <div class="product-actions">
+                        <button class="btn-gold" id="add-to-cart-btn">
+                            <i class="fa-solid fa-cart-plus"></i> إضافة إلى السلة
+                        </button>
+                        <button class="btn-outline-gold" id="buy-now-btn">
+                            <i class="fa-solid fa-bolt"></i> شراء الآن
+                        </button>
+                        <button class="btn-wishlist" id="wishlist-btn">
+                            <i class="fa-regular fa-heart"></i>
+                        </button>
+                    </div>
+
+                    <!-- Info Boxes -->
+                    <div class="product-info-boxes">
+                        <div class="info-box">
+                            <i class="fa-solid fa-truck-fast"></i>
+                            <div>
+                                <h5>شحن سريع</h5>
+                                <p>توصيل خلال 2-3 أيام</p>
+                            </div>
+                        </div>
+                        <div class="info-box">
+                            <i class="fa-solid fa-shield-halved"></i>
+                            <div>
+                                <h5>ضمان الجودة</h5>
+                                <p>100% أصلية</p>
+                            </div>
+                        </div>
+                        <div class="info-box">
+                            <i class="fa-solid fa-rotate-left"></i>
+                            <div>
+                                <h5>إرجاع سهل</h5>
+                                <p>خلال 14 يوم</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Tabs (Description / Specs / Reviews) -->
+            <div class="product-tabs">
+                <button class="tab-btn active" data-tab="description">الوصف</button>
+                <button class="tab-btn" data-tab="specs">المواصفات</button>
+                <button class="tab-btn" data-tab="reviews">التقييمات</button>
+            </div>
+            <div class="tab-content active" id="tab-description">
+                <p id="full-description">الوصف الكامل للمنتج...</p>
+            </div>
+            <div class="tab-content" id="tab-specs">
+                <ul id="specs-list"></ul>
+            </div>
+            <div class="tab-content" id="tab-reviews">
+                <p style="color: var(--text-gray);">لا توجد تقييمات بعد.</p>
+            </div>
+
+            <!-- Related Products -->
+            <section class="section">
+                <div class="section-header">
+                    <h2>منتجات مشابهة</h2>
+                    <div class="divider"></div>
+                </div>
+                <div class="products-grid" id="related-products-grid"></div>
+            </section>
+        </div>
+    </main>
+
+    <!-- ===== FOOTER ===== -->
+    <footer>
+        <div class="footer-grid">
+            <div class="footer-col">
+                <h4>NIVORA</h4>
+                <p>متجرك الأول للفخامة والأناقة. نقدم لك أرقى المنتجات من الفضة، العطور، الساعات، والنظارات.</p>
+            </div>
+            <div class="footer-col">
+                <h4>روابط سريعة</h4>
+                <ul>
+                    <li><a href="index.html">الرئيسية</a></li>
+                    <li><a href="shop.html">المتجر</a></li>
+                    <li><a href="about.html">من نحن</a></li>
+                    <li><a href="contact.html">اتصل بنا</a></li>
+                </ul>
+            </div>
+            <div class="footer-col">
+                <h4>خدمة العملاء</h4>
+                <ul>
+                    <li>سياسة الاستبدال</li>
+                    <li>سياسة الخصوصية</li>
+                    <li>الشروط والأحكام</li>
+                    <li>الأسئلة الشائعة</li>
+                </ul>
+            </div>
+            <div class="footer-col">
+                <h4>تواصل معنا</h4>
+                <ul>
+                    <li><i class="fa-solid fa-phone"></i> 01065859268</li>
+                    <li><i class="fa-solid fa-envelope"></i> info@nivora.com</li>
+                </ul>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            © 2025 NIVORA SILVER. جميع الحقوق محفوظة.
+        </div>
+    </footer>
+
+    <!-- Image Viewer (Fullscreen) -->
+    <div id="image-viewer" class="image-viewer">
+        <span class="close-viewer" id="close-viewer">&times;</span>
+        <span class="nav-viewer prev" id="viewer-prev">&#10094;</span>
+        <img id="viewer-img" src="" alt="Zoomed Image">
+        <span class="nav-viewer next" id="viewer-next">&#10095;</span>
+    </div>
+
+    <script src="assets/js/products.js"></script>
+    <script src="assets/js/main.js"></script>
+    <script src="assets/js/product.js"></script>
+</body>
+                      </html>
