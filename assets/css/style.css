@@ -1,0 +1,223 @@
+/* style.css */
+:root {
+    --bg-dark: #0B0B0B;
+    --bg-card: #1A1A1A;
+    --gold: #D4AF37;
+    --gold-light: #F5E6C8;
+    --text-white: #FFFFFF;
+    --text-gray: #A0A0A0;
+    --silver: #C0C0C0;
+    --font-heading: 'Playfair Display', serif;
+    --font-body: 'Montserrat', sans-serif;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    background-color: var(--bg-dark);
+    color: var(--text-white);
+    font-family: var(--font-body);
+    overflow-x: hidden;
+}
+
+.hidden { display: none !important; }
+
+/* 1. Splash Screen */
+.splash-screen {
+    position: fixed;
+    top: 0; left: 0; width: 100%; height: 100vh;
+    background: var(--bg-dark);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+    transition: opacity 1s ease;
+}
+
+.logo-text {
+    font-family: var(--font-heading);
+    font-size: 5rem;
+    color: var(--gold);
+    letter-spacing: 10px;
+    animation: fadeInScale 3s ease-in-out;
+}
+
+.tagline {
+    font-size: 1.2rem;
+    color: var(--text-gray);
+    margin-top: 10px;
+    opacity: 0;
+    animation: fadeIn 2s ease-in 1s forwards;
+}
+
+@keyframes fadeInScale {
+    0% { opacity: 0; transform: scale(0.8); }
+    100% { opacity: 1; transform: scale(1); }
+}
+@keyframes fadeIn {
+    0% { opacity: 0; }
+    100% { opacity: 1; }
+}
+
+/* 2. Login Screen */
+.login-screen {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    background: radial-gradient(circle at center, #1a1a1a 0%, #0B0B0B 100%);
+}
+
+.login-box {
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(212, 175, 55, 0.3);
+    padding: 50px;
+    border-radius: 15px;
+    text-align: center;
+    width: 400px;
+    backdrop-filter: blur(10px);
+}
+
+.login-box h2 {
+    font-family: var(--font-heading);
+    color: var(--gold);
+    font-size: 2rem;
+    margin-bottom: 10px;
+}
+
+.subtitle {
+    color: var(--text-gray);
+    margin-bottom: 30px;
+    font-size: 0.9rem;
+}
+
+.login-box input {
+    width: 100%;
+    padding: 15px;
+    margin-bottom: 15px;
+    background: transparent;
+    border: 1px solid #333;
+    color: white;
+    border-radius: 5px;
+    font-family: var(--font-body);
+    transition: border 0.3s;
+}
+
+.login-box input:focus {
+    border-color: var(--gold);
+    outline: none;
+}
+
+.btn-primary {
+    width: 100%;
+    padding: 15px;
+    background: var(--gold);
+    color: #000;
+    border: none;
+    border-radius: 5px;
+    font-weight: bold;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: background 0.3s, transform 0.2s;
+}
+
+.btn-primary:hover {
+    background: var(--gold-light);
+    transform: translateY(-2px);
+}
+
+.social-login {
+    margin-top: 25px;
+    border-top: 1px solid #333;
+    padding-top: 20px;
+}
+
+.social-login p {
+    font-size: 0.8rem;
+    color: var(--text-gray);
+    margin-bottom: 10px;
+}
+
+.social-icons {
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+}
+
+.social-btn {
+    background: transparent;
+    border: 1px solid #444;
+    color: white;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: all 0.3s;
+}
+
+.social-btn:hover { border-color: var(--gold); color: var(--gold); }
+
+/* 3. Main Store */
+.main-store { padding: 20px; }
+
+header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px 50px;
+    border-bottom: 1px solid #222;
+}
+
+.logo-small {
+    font-family: var(--font-heading);
+    color: var(--gold);
+    font-size: 1.8rem;
+    letter-spacing: 5px;
+}
+
+nav a {
+    color: var(--text-white);
+    text-decoration: none;
+    margin-left: 20px;
+    font-size: 0.9rem;
+    transition: color 0.3s;
+}
+
+nav a:hover { color: var(--gold); }
+.admin-link { color: var(--gold); border: 1px solid var(--gold); padding: 5px 10px; border-radius: 4px; }
+
+.hero {
+    height: 70vh;
+    display: flex;
+    align-items: center;
+    padding: 0 50px;
+    background: url('https://via.placeholder.com/1920x1080/0B0B0B/D4AF37?text=Hero+Image') no-repeat center center/cover;
+}
+
+.hero-text { max-width: 500px; }
+.hero-text h2 { font-family: var(--font-heading); font-size: 3.5rem; margin-bottom: 15px; }
+.hero-text p { color: var(--text-gray); margin-bottom: 25px; font-size: 1.1rem; }
+
+.product-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    gap: 20px;
+    padding: 40px 50px;
+}
+
+.product-card {
+    background: var(--bg-card);
+    border: 1px solid #222;
+    padding: 20px;
+    text-align: center;
+    border-radius: 10px;
+    transition: transform 0.3s, border 0.3s;
+}
+
+.product-card:hover { transform: translateY(-5px); border-color: var(--gold); }
+.product-card img { width: 100%; height: 200px; object-fit: cover; border-radius: 5px; }
+.product-card h4 { font-family: var(--font-heading); margin: 15px 0 5px; color: var(--gold); }
+.product-card p { color: var(--text-gray); font-size: 0.9rem; }
