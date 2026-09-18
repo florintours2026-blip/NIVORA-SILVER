@@ -2,83 +2,126 @@
 <html lang="ar" dir="rtl">
 <head>
     <meta charset="UTF-8">
-    <title>لوحة الإدارة | NIVORA</title>
-    <link rel="stylesheet" href="style.css">
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;600&family=Playfair+Display:wght@400;700&display=swap" rel="stylesheet">
-    <style>
-        .admin-container { display: flex; height: 100vh; }
-        .sidebar { width: 250px; background: #111; padding: 30px; border-left: 1px solid #222; }
-        .sidebar h2 { color: var(--silver); font-family: var(--font-heading); margin-bottom: 30px; }
-        .sidebar ul { list-style: none; }
-        .sidebar ul li { padding: 15px 0; color: var(--text-gray); cursor: pointer; border-bottom: 1px solid #222; }
-        .sidebar ul li:hover { color: var(--silver); }
-        
-        .main-content { flex: 1; padding: 40px; overflow-y: auto; background: #0B0B0B; }
-        .main-content h1 { color: var(--silver); font-family: var(--font-heading); margin-bottom: 30px; }
-        
-        .import-form { background: #1A1A1A; padding: 30px; border-radius: 10px; border: 1px solid #333; max-width: 800px; }
-        .import-form label { display: block; margin-bottom: 10px; color: var(--text-gray); }
-        .import-form input, .import-form select {
-            width: 100%; padding: 15px; margin-bottom: 20px; background: #0B0B0B; border: 1px solid #333; color: white; border-radius: 5px;
-        }
-        .import-form input:focus { border-color: var(--silver); outline: none; }
-        .import-form button { width: auto; padding: 15px 40px; }
-        
-        .product-list { margin-top: 40px; }
-        .product-item { display: flex; justify-content: space-between; align-items: center; background: #1A1A1A; padding: 15px; margin-bottom: 10px; border-radius: 5px; border: 1px solid #222; }
-        .product-item span { color: var(--text-white); }
-        .product-item .price { color: var(--silver); font-weight: bold; }
-    </style>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>لوحة التحكم | NIVORA</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 <body>
 
-<div class="admin-container">
-    <!-- الشريط الجانبي -->
+<div class="admin-layout">
+    <!-- Sidebar -->
     <div class="sidebar">
-        <h2>NIVORA Admin</h2>
-        <ul>
-            <li>لوحة التحكم</li>
-            <li>إدارة المنتجات</li>
-            <li>الاستيراد الذكي (Dropshipping)</li>
-            <li>الطلبات</li>
-            <li>المخزون</li>
-            <li>الإعدادات</li>
+        <div class="sidebar-logo">
+            <img src="images/logo.png" alt="NIVORA" onerror="this.src='https://via.placeholder.com/150x60/0A0A0A/C9A96E?text=NIVORA'">
+        </div>
+        <ul class="sidebar-menu">
+            <li class="active"><i class="fa-solid fa-chart-pie"></i> لوحة التحكم</li>
+            <li><i class="fa-solid fa-box"></i> المنتجات</li>
+            <li><i class="fa-solid fa-cart-shopping"></i> الطلبات</li>
+            <li><i class="fa-solid fa-users"></i> العملاء</li>
+            <li><i class="fa-solid fa-tags"></i> العروض والتخفيضات</li>
+            <li><i class="fa-solid fa-chart-line"></i> التقارير والإحصائيات</li>
+            <li><i class="fa-solid fa-gear"></i> إعدادات المتجر</li>
         </ul>
-        <a href="index.html" style="display:block; margin-top:50px; color:var(--silver); text-decoration:none;">← العودة للمتجر</a>
+        <div class="sidebar-footer">
+            <img src="images/sidebar-bg.jpg" alt="Sidebar" onerror="this.src='https://via.placeholder.com/120x120/0A0A0A/C9A96E?text=Silver'">
+            <p style="color:var(--gold); font-size:0.8rem;">الرفاهية في كل تفصيلة</p>
+        </div>
     </div>
 
-    <!-- المحتوى الرئيسي -->
+    <!-- Main Content -->
     <div class="main-content">
-        <h1>نظام الاستيراد الذكي</h1>
-        
-        <div class="import-form">
-            <label>رابط المنتج (AliExpress / Amazon / Alibaba)</label>
-            <input type="text" id="product-url" placeholder="https://www.aliexpress.com/item/...">
-            
-            <label>سعر المنتج الأساسي (بالدولار)</label>
-            <input type="number" id="base-price" placeholder="مثال: 50">
-            
-            <label>رسوم التوصيل (بالدولار)</label>
-            <input type="number" id="shipping-cost" placeholder="مثال: 10">
-            
-            <label>نسبة الربح المضافة (%)</label>
-            <select id="profit-margin">
-                <option value="10">10%</option>
-                <option value="20">20%</option>
-                <option value="50">50%</option>
-                <option value="100">100%</option>
-            </select>
-            
-            <button class="btn-primary" onclick="importProduct()">استيراد المنتج</button>
+        <!-- Top Bar -->
+        <div class="top-bar">
+            <input type="text" class="search-bar" placeholder="ابحث عن منتج أو رقم طلب...">
+            <div class="user-info">
+                <i class="fa-regular fa-bell" style="color:var(--text-gray); font-size:1.2rem;"></i>
+                <img src="https://via.placeholder.com/40/121212/C9A96E?text=A" alt="Admin">
+                <div>
+                    <div style="font-size:0.9rem;">مدير المتجر</div>
+                    <div style="font-size:0.7rem; color:var(--text-gray);">admin@nivora.com</div>
+                </div>
+                <i class="fa-solid fa-gear" style="color:var(--text-gray);"></i>
+            </div>
         </div>
 
-        <div class="product-list" id="admin-product-list">
-            <h3 style="color:var(--silver); margin-bottom:15px;">المنتجات المستوردة</h3>
-            <!-- سيتم عرض المنتجات هنا -->
+        <!-- Welcome Banner -->
+        <div style="background: linear-gradient(to left, rgba(5,5,5,0.9) 30%, rgba(5,5,5,0.4)), url('https://via.placeholder.com/1200x200/111111/C9A96E?text=Admin+Banner') no-repeat center center/cover; padding: 30px; border-radius: 10px; margin-bottom: 30px; border: 1px solid var(--border-color);">
+            <h2 style="font-family: var(--font-heading); color: var(--gold); margin-bottom: 5px;">مرحباً بك في لوحة تحكم الإدارة</h2>
+            <p style="color: var(--text-gray); font-size: 0.9rem;">إدارة كاملة لمتجرك من مكان واحد</p>
         </div>
+
+        <!-- Stats -->
+        <div class="stats-grid">
+            <div class="stat-card">
+                <h3>المنتجات في المخزون</h3>
+                <div class="value">362</div>
+                <div class="change"><i class="fa-solid fa-arrow-up"></i> 5% منذ 24 ساعة</div>
+            </div>
+            <div class="stat-card">
+                <h3>إجمالي المبيعات</h3>
+                <div class="value">12,480 ر.س</div>
+                <div class="change"><i class="fa-solid fa-arrow-up"></i> 15% منذ 24 ساعة</div>
+            </div>
+            <div class="stat-card">
+                <h3>العملاء الجدد</h3>
+                <div class="value">18</div>
+                <div class="change"><i class="fa-solid fa-arrow-up"></i> 8% منذ 24 ساعة</div>
+            </div>
+            <div class="stat-card">
+                <h3>الطلبات الجديدة</h3>
+                <div class="value">24</div>
+                <div class="change"><i class="fa-solid fa-arrow-up"></i> 12% منذ 24 ساعة</div>
+            </div>
+        </div>
+
+        <!-- Data Table -->
+        <h3 style="color: var(--gold); margin-bottom: 15px; font-family: var(--font-heading);">إدارة المخزون</h3>
+        <table class="data-table">
+            <thead>
+                <tr>
+                    <th>#</th>
+                    <th>اسم المنتج</th>
+                    <th>الفئة</th>
+                    <th>الكمية</th>
+                    <th>الحالة</th>
+                    <th>السعر</th>
+                    <th>إجراءات</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>1</td>
+                    <td>ساعة كلاسيك سيلفر</td>
+                    <td>الساعات</td>
+                    <td>15</td>
+                    <td><span class="status-badge status-active">متوفر</span></td>
+                    <td>2,499 ر.س</td>
+                    <td><i class="fa-solid fa-eye" style="color:var(--text-gray); margin-left:10px;"></i> <i class="fa-solid fa-pen" style="color:var(--gold);"></i></td>
+                </tr>
+                <tr>
+                    <td>2</td>
+                    <td>عطر رجالي فاخر</td>
+                    <td>العطور</td>
+                    <td>32</td>
+                    <td><span class="status-badge status-active">متوفر</span></td>
+                    <td>749 ر.س</td>
+                    <td><i class="fa-solid fa-eye" style="color:var(--text-gray); margin-left:10px;"></i> <i class="fa-solid fa-pen" style="color:var(--gold);"></i></td>
+                </tr>
+                <tr>
+                    <td>3</td>
+                    <td>خاتم فضة فاخر</td>
+                    <td>المجوهرات</td>
+                    <td>8</td>
+                    <td><span class="status-badge status-inactive">منخفض</span></td>
+                    <td>1,299 ر.س</td>
+                    <td><i class="fa-solid fa-eye" style="color:var(--text-gray); margin-left:10px;"></i> <i class="fa-solid fa-pen" style="color:var(--gold);"></i></td>
+                </tr>
+            </tbody>
+        </table>
     </div>
 </div>
 
-<script src="script.js"></script>
 </body>
 </html>
