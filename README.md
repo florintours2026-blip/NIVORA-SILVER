@@ -1,4 +1,4 @@
-# NIVORA SILVER — Full Stack
+# NIVORA  — Full Stack
 
 Frontend: HTML/CSS/JavaScript.
 Backend: Node.js + Express.
