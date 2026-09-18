@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>المتجر | NIVORA</title>
+    <link rel="stylesheet" href="assets/css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;600;700&family=Cairo:wght@300;400;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+
+    <!-- ===== HEADER ===== -->
+    <header>
+        <div class="header-left">
+            <div class="logo">
+                <a href="index.html">
+                    <span class="logo-text">NIVORA</span>
+                    <span class="logo-sub">SILVER</span>
+                </a>
+            </div>
+            <nav>
+                <ul>
+                    <li><a href="index.html">الرئيسية</a></li>
+                    <li><a href="shop.html" class="active">المتجر</a></li>
+                    <li><a href="jewelry.html">الفضة والمجوهرات</a></li>
+                    <li><a href="perfumes.html">العطور</a></li>
+                    <li><a href="watches.html">الساعات</a></li>
+                    <li><a href="sunglasses.html">النظارات الشمسية</a></li>
+                </ul>
+            </nav>
+        </div>
+        <div class="header-right">
+            <i class="fa-solid fa-magnifying-glass"></i>
+            <i class="fa-regular fa-user"></i>
+            <a href="cart.html" style="position: relative;">
+                <i class="fa-solid fa-cart-shopping"></i>
+                <span class="cart-count" id="cart-count">0</span>
+            </a>
+            <span class="lang-switch">AR | EN</span>
+        </div>
+    </header>
+
+    <!-- ===== PAGE HEADER ===== -->
+    <div class="page-header">
+        <h1>المتجر</h1>
+        <div class="breadcrumb">
+            <a href="index.html">الرئيسية</a> / <span>المتجر</span>
+        </div>
+    </div>
+
+    <!-- ===== SHOP LAYOUT ===== -->
+    <div class="shop-layout">
+
+        <!-- Sidebar Filters -->
+        <aside class="filters-sidebar">
+            <div class="filter-group">
+                <h4>الأقسام</h4>
+                <label><input type="checkbox" value="jewelry"> الفضة والمجوهرات</label>
+                <label><input type="checkbox" value="perfumes"> العطور</label>
+                <label><input type="checkbox" value="watches"> الساعات</label>
+                <label><input type="checkbox" value="sunglasses"> النظارات الشمسية</label>
+            </div>
+
+            <div class="filter-group">
+                <h4>السعر</h4>
+                <input type="range" min="0" max="50000" value="50000" id="price-range">
+                <p style="color: var(--text-gray); font-size: 0.85rem; margin-top: 5px;">
+                    حتى <span id="price-display">50,000</span> ر.س
+                </p>
+            </div>
+
+            <div class="filter-group">
+                <h4>التقييم</h4>
+                <label><input type="checkbox" value="5"> 5 نجوم</label>
+                <label><input type="checkbox" value="4"> 4 نجوم أو أكثر</label>
+                <label><input type="checkbox" value="3"> 3 نجوم أو أكثر</label>
+            </div>
+
+            <div class="filter-group">
+                <h4>التوفر</h4>
+                <label><input type="checkbox" value="instock"> متوفر فقط</label>
+                <label><input type="checkbox" value="sale"> عليه خصم</label>
+            </div>
+        </aside>
+
+        <!-- Products Area -->
+        <div class="shop-content">
+            <!-- Toolbar -->
+            <div class="shop-toolbar">
+                <input type="text" class="search-box" placeholder="ابحث عن منتج...">
+                <select id="sort-select">
+                    <option value="default">الترتيب الافتراضي</option>
+                    <option value="price-asc">السعر: من الأقل للأعلى</option>
+                    <option value="price-desc">السعر: من الأعلى للأقل</option>
+                    <option value="rating">الأعلى تقييمًا</option>
+                </select>
+            </div>
+
+            <!-- Products Grid -->
+            <div class="products-grid" id="shop-products-grid">
+                <!-- سيتم تحميل المنتجات هنا بواسطة JavaScript -->
+            </div>
+        </div>
+
+    </div>
+
+    <!-- ===== FOOTER ===== -->
+    <footer>
+        <div class="footer-grid">
+            <div class="footer-col">
+                <h4>NIVORA</h4>
+                <p>متجرك الأول للفخامة والأناقة. نقدم لك أرقى المنتجات من الفضة، العطور، الساعات، والنظارات الشمسية.</p>
+            </div>
+            <div class="footer-col">
+                <h4>روابط سريعة</h4>
+                <ul>
+                    <li><a href="index.html">الرئيسية</a></li>
+                    <li><a href="shop.html">المتجر</a></li>
+                    <li><a href="about.html">من نحن</a></li>
+                    <li><a href="contact.html">اتصل بنا</a></li>
+                </ul>
+            </div>
+            <div class="footer-col">
+                <h4>خدمة العملاء</h4>
+                <ul>
+                    <li>سياسة الاستبدال</li>
+                    <li>سياسة الخصوصية</li>
+                    <li>الشروط والأحكام</li>
+                    <li>الأسئلة الشائعة</li>
+                </ul>
+            </div>
+            <div class="footer-col">
+                <h4>تواصل معنا</h4>
+                <ul>
+                    <li><i class="fa-solid fa-phone"></i> 01065859268</li>
+                    <li><i class="fa-solid fa-envelope"></i> florintoursim@gmail.com</li>
+                </ul>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            © 2025 NIVORA SILVER. جميع الحقوق محفوظة.
+        </div>
+    </footer>
+
+    <script src="assets/js/products.js"></script>
+    <script src="assets/js/main.js"></script>
+    <script src="assets/js/cart.js"></script>
+    <script>
+        // تفعيل عرض السعر في الفلتر
+        const priceRange = document.getElementById('price-range');
+        if (priceRange) {
+            priceRange.addEventListener('input', (e) => {
+                document.getElementById('price-display').textContent = 
+                    parseInt(e.target.value).toLocaleString();
+            });
+        }
+    </script>
+</body>
+</html>
