@@ -4,72 +4,117 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>NIVORA | الفخامة والأناقة</title>
-    <link rel="stylesheet" href="style.css">
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;600&family=Playfair+Display:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css">
+    <!-- FontAwesome للأيقونات -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 <body>
 
-    <!-- 1. شاشة البداية (Splash Screen) -->
-    <div id="splash-screen" class="splash-screen">
-        <div class="logo-container">
-            <h1 class="logo-text">NIVORA</h1>
-            <p class="tagline">لمعان الفضة .. يعكس ذوقك</p>
+    <!-- Header -->
+    <header>
+        <div class="logo-area">
+            <img src="images/logo.png" alt="NIVORA Logo" onerror="this.src='https://via.placeholder.com/150x50/050505/C9A96E?text=NIVORA'">
+            <div>
+                <div class="logo-text">NIVORA</div>
+                <div class="logo-sub">SILVER</div>
+            </div>
+        </div>
+        <nav>
+            <ul>
+                <li class="active">الرئيسية</li>
+                <li>المتجر</li>
+                <li>الفئات</li>
+                <li>من نحن</li>
+                <li>اتصل بنا</li>
+            </ul>
+        </nav>
+        <div class="header-icons">
+            <i class="fa-solid fa-magnifying-glass"></i>
+            <i class="fa-regular fa-heart"></i>
+            <i class="fa-solid fa-cart-shopping"></i>
+            <i class="fa-regular fa-user"></i>
+        </div>
+    </header>
+
+    <!-- Hero -->
+    <section class="hero">
+        <div class="hero-content">
+            <h1>كل ما يميزك في<br>مكان واحد</h1>
+            <p>فضة، مجوهرات، عطور، ساعات، ونظارات شمسية. أناقة لا تُضاهى في كل تفصيلة.</p>
+            <a href="#" class="btn-outline">تسوق الآن <i class="fa-solid fa-arrow-left"></i></a>
+        </div>
+        <div class="hero-image">
+            <img src="https://via.placeholder.com/500x450/111111/C9A96E?text=Hero+Image" alt="Hero">
+        </div>
+    </section>
+
+    <!-- Categories (شبيهة بالصورة) -->
+    <h2 class="section-title">تسوق حسب الفئة</h2>
+    <p class="section-subtitle">اختر من بين مجموعتنا الحصرية</p>
+    <div class="product-grid">
+        <div class="product-card">
+            <img src="https://via.placeholder.com/300x300/121212/888888?text=Silver" alt="فضة">
+            <h4>الفضة والمجوهرات</h4>
+            <p class="price">1,299 ر.س</p>
+            <button class="btn-add">أضف إلى السلة <i class="fa-solid fa-cart-plus"></i></button>
+        </div>
+        <div class="product-card">
+            <img src="https://via.placeholder.com/300x300/121212/888888?text=Perfume" alt="عطور">
+            <h4>عطور فاخرة</h4>
+            <p class="price">899 ر.س</p>
+            <button class="btn-add">أضف إلى السلة <i class="fa-solid fa-cart-plus"></i></button>
+        </div>
+        <div class="product-card">
+            <img src="https://via.placeholder.com/300x300/121212/888888?text=Watches" alt="ساعات">
+            <h4>الساعات الفاخرة</h4>
+            <p class="price">2,899 ر.س</p>
+            <button class="btn-add">أضف إلى السلة <i class="fa-solid fa-cart-plus"></i></button>
+        </div>
+        <div class="product-card">
+            <img src="https://via.placeholder.com/300x300/121212/888888?text=Sunglasses" alt="نظارات">
+            <h4>النظارات الشمسية</h4>
+            <p class="price">1,299 ر.س</p>
+            <button class="btn-add">أضف إلى السلة <i class="fa-solid fa-cart-plus"></i></button>
         </div>
     </div>
 
-    <!-- 2. شاشة تسجيل الدخول -->
-    <div id="login-screen" class="login-screen hidden">
-        <div class="login-box">
-            <h2>تسجيل الدخول</h2>
-            <p class="subtitle">انضم إلى عالم NIVORA الحصري</p>
-            
-            <form id="login-form">
-                <input type="text" placeholder="البريد الإلكتروني أو رقم الهاتف" required>
-                <input type="password" placeholder="كلمة المرور" required>
-                <button type="submit" class="btn-primary">دخول</button>
-            </form>
-            
-            <div class="social-login">
-                <p>أو الدخول عبر</p>
-                <div class="social-icons">
-                    <button class="social-btn fb">فيسبوك</button>
-                    <button class="social-btn icloud">آيكلاود</button>
-                </div>
+    <!-- Footer -->
+    <footer>
+        <div class="footer-grid">
+            <div class="footer-col">
+                <h4>NIVORA</h4>
+                <p style="color:var(--text-gray); font-size:0.9rem;">متجرك الأول للفخامة والأناقة. نقدم لك أرقى المنتجات من الفضة، العطور، الساعات، والنظارات.</p>
+            </div>
+            <div class="footer-col">
+                <h4>روابط سريعة</h4>
+                <ul>
+                    <li>الرئيسية</li>
+                    <li>المتجر</li>
+                    <li>من نحن</li>
+                    <li>اتصل بنا</li>
+                </ul>
+            </div>
+            <div class="footer-col">
+                <h4>خدمة العملاء</h4>
+                <ul>
+                    <li>سياسة الاستبدال</li>
+                    <li>سياسة الخصوصية</li>
+                    <li>الشروط والأحكام</li>
+                    <li>الأسئلة الشائعة</li>
+                </ul>
+            </div>
+            <div class="footer-col">
+                <h4>تواصل معنا</h4>
+                <ul>
+                    <li><i class="fa-solid fa-phone"></i> 01065859268</li>
+                    <li><i class="fa-solid fa-envelope"></i> info@nivora.com</li>
+                </ul>
             </div>
         </div>
-    </div>
+        <div class="footer-bottom">
+            © 2025 NIVORA SILVER. جميع الحقوق محفوظة.
+        </div>
+    </footer>
 
-    <!-- 3. واجهة المتجر (Main Store) -->
-    <div id="main-store" class="main-store hidden">
-        <header>
-            <div class="header-content">
-                <h1 class="logo-small">NIVORA</h1>
-                <nav>
-                    <a href="#">الرئيسية</a>
-                    <a href="#">المجموعة</a>
-                    <a href="#">اكتشف</a>
-                    <a href="#">تواصل معنا</a>
-                    <a href="admin.html" class="admin-link">لوحة الإدارة</a>
-                </nav>
-            </div>
-        </header>
-
-        <section class="hero">
-            <div class="hero-text">
-                <h2>أناقة تدوم .. بلمسة فضية</h2>
-                <p>تصاميم فاخرة من الفضة الخالصة، لتكتمل إطلالتك بأناقة لا تُنسى.</p>
-                <button class="btn-primary">اكتشف المجموعة</button>
-            </div>
-        </section>
-
-        <section class="products-preview">
-            <h3>أحدث المنتجات</h3>
-            <div class="product-grid" id="product-grid">
-                <!-- سيتم تعبئة المنتجات هنا بواسطة JavaScript -->
-            </div>
-        </section>
-    </div>
-
-    <script src="script.js"></script>
 </body>
 </html>
