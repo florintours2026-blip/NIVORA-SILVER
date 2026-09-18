@@ -5,7 +5,6 @@
 // ==========================================
 
 document.addEventListener('DOMContentLoaded', () => {
-    // التأكد من أننا في الصفحة الرئيسية
     const splash = document.getElementById('splash-screen');
     const loginScreen = document.getElementById('login-screen');
     const mainStore = document.getElementById('main-store');
@@ -17,17 +16,15 @@ document.addEventListener('DOMContentLoaded', () => {
             setTimeout(() => {
                 splash.classList.add('hidden');
                 loginScreen.classList.remove('hidden');
-            }, 1000); // وقت التلاشي
+            }, 1000);
         }, 3500);
 
         // 2. التعامل مع نموذج تسجيل الدخول
         const loginForm = document.getElementById('login-form');
         loginForm.addEventListener('submit', (e) => {
-            e.preventDefault(); // منع إعادة تحميل الصفحة
+            e.preventDefault();
             loginScreen.classList.add('hidden');
             mainStore.classList.remove('hidden');
-            
-            // محاكاة تحميل المنتجات في المتجر
             loadStoreProducts();
         });
     }
@@ -37,7 +34,6 @@ document.addEventListener('DOMContentLoaded', () => {
 // 2. وظائف لوحة الإدارة (Admin Panel)
 // ==========================================
 
-// مصفوفة لتخزين المنتجات (محاكاة قاعدة البيانات)
 let productsDB = [];
 
 function importProduct() {
@@ -51,12 +47,10 @@ function importProduct() {
         return;
     }
 
-    // 1. حساب السعر النهائي
     const totalCost = basePrice + shipping;
     const profitAmount = totalCost * (margin / 100);
     const finalPrice = totalCost + profitAmount;
 
-    // 2. إنشاء كائن المنتج
     const newProduct = {
         id: Date.now(),
         url: url,
@@ -66,14 +60,11 @@ function importProduct() {
         margin: margin
     };
 
-    // 3. إضافة المنتج إلى "قاعدة البيانات"
     productsDB.push(newProduct);
-
-    // 4. تحديث الواجهة
     renderAdminProducts();
+    
     alert(`تم استيراد المنتج بنجاح!\nالسعر النهائي للعميل: $${finalPrice.toFixed(2)}`);
     
-    // تفريغ الحقول
     document.getElementById('product-url').value = '';
     document.getElementById('base-price').value = '';
     document.getElementById('shipping-cost').value = '';
@@ -81,10 +72,9 @@ function importProduct() {
 
 function renderAdminProducts() {
     const listContainer = document.getElementById('admin-product-list');
-    if (!listContainer) return; // إذا لم نكن في صفحة الإدارة
+    if (!listContainer) return;
 
-    // الحفاظ على العنوان
-    let html = '<h3 style="color:var(--gold); margin-bottom:15px;">المنتجات المستوردة</h3>';
+    let html = '<h3 style="color:var(--silver); margin-bottom:15px;">المنتجات المستوردة</h3>';
     
     productsDB.forEach(product => {
         html += `
@@ -105,25 +95,24 @@ function renderAdminProducts() {
 // ==========================================
 
 function loadStoreProducts() {
-    // محاكاة جلب المنتجات من قاعدة البيانات وعرضها في الصفحة الرئيسية
     const grid = document.getElementById('product-grid');
     if (!grid) return;
 
-    // إذا كانت قاعدة البيانات فارغة، نضع منتجات وهمية للعرض
+    // منتجات وهمية لـ NIVORA
     if (productsDB.length === 0) {
         productsDB = [
-            { id: 1, name: 'Noir Élégance', price: '120.00', img: 'https://via.placeholder.com/300x300/1A1A1A/D4AF37?text=Noir' },
-            { id: 2, name: 'Amber Royale', price: '150.00', img: 'https://via.placeholder.com/300x300/1A1A1A/D4AF37?text=Amber' },
-            { id: 3, name: 'Velvet Santal', price: '135.00', img: 'https://via.placeholder.com/300x300/1A1A1A/D4AF37?text=Velvet' }
+            { id: 1, name: 'خاتم فضة عيار 925', price: '95.00', img: 'https://via.placeholder.com/300x300/1A1A1A/C0C0C0?text=Ring' },
+            { id: 2, name: 'سلسلة فضة رجالية', price: '120.00', img: 'https://via.placeholder.com/300x300/1A1A1A/C0C0C0?text=Necklace' },
+            { id: 3, name: 'أسورة فضة فاخرة', price: '110.00', img: 'https://via.placeholder.com/300x300/1A1A1A/C0C0C0?text=Bracelet' }
         ];
     }
 
-    grid.innerHTML = ''; // تفريغ الشبكة
+    grid.innerHTML = '';
     productsDB.forEach(p => {
         const card = document.createElement('div');
         card.className = 'product-card';
         card.innerHTML = `
-            <img src="${p.img || 'https://via.placeholder.com/300x300/1A1A1A/D4AF37?text=Product'}" alt="${p.name || 'منتج'}">
+            <img src="${p.img || 'https://via.placeholder.com/300x300/1A1A1A/C0C0C0?text=Product'}" alt="${p.name || 'منتج'}">
             <h4>${p.name || 'منتج جديد'}</h4>
             <p>$${p.price || p.finalPrice}</p>
             <button class="btn-primary" style="margin-top:10px; padding:10px; font-size:0.8rem;">عرض التفاصيل</button>
