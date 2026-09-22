@@ -1,127 +1,21 @@
-<!DOCTYPE html>
-<html lang="ar" dir="rtl">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>لوحة التحكم | NIVORA</title>
-    <link rel="stylesheet" href="css/style.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-</head>
-<body>
-
-<div class="admin-layout">
-    <!-- Sidebar -->
-    <div class="sidebar">
-        <div class="sidebar-logo">
-            <img src="images/logo.png" alt="NIVORA" onerror="this.src='https://via.placeholder.com/150x60/0A0A0A/C9A96E?text=NIVORA'">
-        </div>
-        <ul class="sidebar-menu">
-            <li class="active"><i class="fa-solid fa-chart-pie"></i> لوحة التحكم</li>
-            <li><i class="fa-solid fa-box"></i> المنتجات</li>
-            <li><i class="fa-solid fa-cart-shopping"></i> الطلبات</li>
-            <li><i class="fa-solid fa-users"></i> العملاء</li>
-            <li><i class="fa-solid fa-tags"></i> العروض والتخفيضات</li>
-            <li><i class="fa-solid fa-chart-line"></i> التقارير والإحصائيات</li>
-            <li><i class="fa-solid fa-gear"></i> إعدادات المتجر</li>
-        </ul>
-        <div class="sidebar-footer">
-            <img src="images/sidebar-bg.jpg" alt="Sidebar" onerror="this.src='https://via.placeholder.com/120x120/0A0A0A/C9A96E?text=Silver'">
-            <p style="color:var(--gold); font-size:0.8rem;">الرفاهية في كل تفصيلة</p>
-        </div>
-    </div>
-
-    <!-- Main Content -->
-    <div class="main-content">
-        <!-- Top Bar -->
-        <div class="top-bar">
-            <input type="text" class="search-bar" placeholder="ابحث عن منتج أو رقم طلب...">
-            <div class="user-info">
-                <i class="fa-regular fa-bell" style="color:var(--text-gray); font-size:1.2rem;"></i>
-                <img src="https://via.placeholder.com/40/121212/C9A96E?text=A" alt="Admin">
-                <div>
-                    <div style="font-size:0.9rem;">مدير المتجر</div>
-                    <div style="font-size:0.7rem; color:var(--text-gray);">admin@nivora.com</div>
-                </div>
-                <i class="fa-solid fa-gear" style="color:var(--text-gray);"></i>
-            </div>
-        </div>
-
-        <!-- Welcome Banner -->
-        <div style="background: linear-gradient(to left, rgba(5,5,5,0.9) 30%, rgba(5,5,5,0.4)), url('https://via.placeholder.com/1200x200/111111/C9A96E?text=Admin+Banner') no-repeat center center/cover; padding: 30px; border-radius: 10px; margin-bottom: 30px; border: 1px solid var(--border-color);">
-            <h2 style="font-family: var(--font-heading); color: var(--gold); margin-bottom: 5px;">مرحباً بك في لوحة تحكم الإدارة</h2>
-            <p style="color: var(--text-gray); font-size: 0.9rem;">إدارة كاملة لمتجرك من مكان واحد</p>
-        </div>
-
-        <!-- Stats -->
-        <div class="stats-grid">
-            <div class="stat-card">
-                <h3>المنتجات في المخزون</h3>
-                <div class="value">362</div>
-                <div class="change"><i class="fa-solid fa-arrow-up"></i> 5% منذ 24 ساعة</div>
-            </div>
-            <div class="stat-card">
-                <h3>إجمالي المبيعات</h3>
-                <div class="value">12,480 ر.س</div>
-                <div class="change"><i class="fa-solid fa-arrow-up"></i> 15% منذ 24 ساعة</div>
-            </div>
-            <div class="stat-card">
-                <h3>العملاء الجدد</h3>
-                <div class="value">18</div>
-                <div class="change"><i class="fa-solid fa-arrow-up"></i> 8% منذ 24 ساعة</div>
-            </div>
-            <div class="stat-card">
-                <h3>الطلبات الجديدة</h3>
-                <div class="value">24</div>
-                <div class="change"><i class="fa-solid fa-arrow-up"></i> 12% منذ 24 ساعة</div>
-            </div>
-        </div>
-
-        <!-- Data Table -->
-        <h3 style="color: var(--gold); margin-bottom: 15px; font-family: var(--font-heading);">إدارة المخزون</h3>
-        <table class="data-table">
-            <thead>
-                <tr>
-                    <th>#</th>
-                    <th>اسم المنتج</th>
-                    <th>الفئة</th>
-                    <th>الكمية</th>
-                    <th>الحالة</th>
-                    <th>السعر</th>
-                    <th>إجراءات</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td>1</td>
-                    <td>ساعة كلاسيك سيلفر</td>
-                    <td>الساعات</td>
-                    <td>15</td>
-                    <td><span class="status-badge status-active">متوفر</span></td>
-                    <td>2,499 ر.س</td>
-                    <td><i class="fa-solid fa-eye" style="color:var(--text-gray); margin-left:10px;"></i> <i class="fa-solid fa-pen" style="color:var(--gold);"></i></td>
-                </tr>
-                <tr>
-                    <td>2</td>
-                    <td>عطر رجالي فاخر</td>
-                    <td>العطور</td>
-                    <td>32</td>
-                    <td><span class="status-badge status-active">متوفر</span></td>
-                    <td>749 ر.س</td>
-                    <td><i class="fa-solid fa-eye" style="color:var(--text-gray); margin-left:10px;"></i> <i class="fa-solid fa-pen" style="color:var(--gold);"></i></td>
-                </tr>
-                <tr>
-                    <td>3</td>
-                    <td>خاتم فضة فاخر</td>
-                    <td>المجوهرات</td>
-                    <td>8</td>
-                    <td><span class="status-badge status-inactive">منخفض</span></td>
-                    <td>1,299 ر.س</td>
-                    <td><i class="fa-solid fa-eye" style="color:var(--text-gray); margin-left:10px;"></i> <i class="fa-solid fa-pen" style="color:var(--gold);"></i></td>
-                </tr>
-            </tbody>
-        </table>
-    </div>
-</div>
-
-</body>
-</html>
+<!doctype html><html lang="ar" dir="rtl"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><title>NIVORA | لوحة الإدارة</title><script src="config/config.js"></script><script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script><script src="assets/js/nivora-core.js"></script><link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700&family=Cormorant+Garamond:wght@500;600;700&display=swap" rel="stylesheet"><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"><style>
+:root{--bg:#070809;--panel:#0e1113;--panel2:#111518;--line:#292d30;--gold:#d8b274;--gold2:#f0d3a0;--text:#f5f1e8;--muted:#9da2a5;--green:#47c58a;--red:#e76666;--amber:#e7ad55}*{box-sizing:border-box}body{margin:0;background:radial-gradient(circle at 70% -20%,#1b1710 0,#070809 42%);color:var(--text);font-family:Cairo,sans-serif}button,input,select,textarea{font:inherit}button{cursor:pointer}.layout{display:grid;grid-template-columns:250px 1fr;min-height:100vh}.side{border-left:1px solid var(--line);background:#090b0c;padding:18px;position:sticky;top:0;height:100vh}.brand{font-family:'Cormorant Garamond';font-size:31px;letter-spacing:8px;text-align:center;color:#e7d0ab}.sub{text-align:center;color:var(--gold);letter-spacing:5px;font-size:11px;margin-top:-8px}.nav{margin-top:28px;display:grid;gap:7px}.nav button{background:transparent;border:1px solid transparent;color:#b8bdc0;padding:13px 14px;text-align:right;border-radius:10px}.nav button.active,.nav button:hover{background:linear-gradient(90deg,#18120b,#0e1113);border-color:#5a4932;color:var(--gold2)}.main{padding:20px;max-width:1600px;width:100%;margin:auto}.top{display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid var(--line);padding-bottom:15px;margin-bottom:18px}.top h1{font-family:'Cormorant Garamond';font-size:34px;margin:0}.ghost{background:#111416;border:1px solid var(--line);color:#ddd;padding:9px 12px;border-radius:9px}.grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}.card{background:linear-gradient(145deg,#121618,#0c0f10);border:1px solid var(--line);border-radius:13px;padding:17px;box-shadow:0 10px 30px #0005}.metric .label{color:var(--muted);font-size:12px}.metric .num{font-size:28px;margin:8px 0}.up{color:var(--green);font-size:11px}.section{margin-top:14px}.section-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px}.section-head h2{font-size:17px;margin:0}.table-wrap{overflow:auto}.table{width:100%;border-collapse:collapse;min-width:760px}.table th,.table td{border-bottom:1px solid #252a2d;padding:12px;text-align:right;white-space:nowrap}.table th{color:var(--gold);font-size:12px}.pill{display:inline-flex;padding:4px 9px;border-radius:99px;font-size:11px}.ok{background:#123325;color:#65dc9c}.low{background:#392a14;color:#f2bd61}.bad{background:#3a1717;color:#ff7b7b}.form{display:grid;grid-template-columns:1fr 1fr;gap:10px}.field{display:grid;gap:6px}.field.full{grid-column:1/-1}.field label{font-size:12px;color:var(--muted)}.field input,.field select,.field textarea{width:100%;background:#080a0b;color:#fff;border:1px solid #303538;border-radius:9px;padding:11px}.field textarea{min-height:110px}.gold{background:linear-gradient(120deg,#b88d4e,#efd09b);color:#15110b;border:0;padding:11px 16px;border-radius:9px;font-weight:700}.danger{background:#341616;color:#ff8b8b;border:1px solid #6d2c2c;padding:9px 12px;border-radius:8px}.note{background:#15120e;border:1px solid #5a4932;color:#d7c29e;padding:12px;border-radius:10px;font-size:12px;line-height:1.8}.hidden{display:none!important}.mobilebar{display:none}
+@media(max-width:900px){.layout{display:block}.side{display:none}.main{padding:12px 12px 80px}.grid{grid-template-columns:repeat(2,1fr)}.top h1{font-size:26px}.mobilebar{display:grid;position:fixed;bottom:0;left:0;right:0;background:#0a0c0d;border-top:1px solid var(--line);grid-template-columns:repeat(4,1fr);z-index:9}.mobilebar button{background:transparent;color:#aaa;border:0;padding:10px 3px;font-size:10px}.mobilebar button.active{color:var(--gold)}.form{grid-template-columns:1fr}.field.full{grid-column:auto}.card{padding:13px}}
+</style></head><body><div class="layout"><aside class="side"><div class="brand">NIVORA</div><div class="sub">SILVER</div><nav class="nav"><button class="active" data-page="dashboard"><i class="fa-solid fa-chart-line"></i> لوحة التحكم</button><button data-page="products"><i class="fa-solid fa-box"></i> المنتجات والمخزون</button><button data-page="import"><i class="fa-solid fa-link"></i> استيراد بالرابط</button><button data-page="orders"><i class="fa-solid fa-cart-shopping"></i> الطلبات</button><button data-page="customers"><i class="fa-solid fa-users"></i> العملاء والاهتمامات</button><button data-page="offers"><i class="fa-solid fa-tags"></i> العروض</button><button data-page="accounting"><i class="fa-solid fa-coins"></i> المحاسبة والأرباح</button><button data-page="settings"><i class="fa-solid fa-gear"></i> إعدادات المتجر</button></nav><div class="note" style="margin-top:25px">مصمم للعمل من الهاتف أولاً. جميع البيانات الحقيقية تنتقل إلى Supabase بعد إعداد المشروع.</div></aside><main class="main"><div class="top"><div><h1 id="pageTitle">لوحة تحكم NIVORA</h1><small id="status" style="color:var(--muted)">وضع تجريبي محلي</small></div><button class="ghost" onclick="location.href='index.html'"><i class="fa-solid fa-store"></i> المتجر</button></div><div id="app"></div></main></div><nav class="mobilebar"><button class="active" data-page="dashboard">الرئيسية</button><button data-page="products">المنتجات</button><button data-page="orders">الطلبات</button><button data-page="settings">الإعدادات</button></nav>
+<script>
+const pages={dashboard:'لوحة التحكم',products:'المنتجات والمخزون',import:'استيراد المنتجات بالرابط',orders:'إدارة الطلبات',customers:'العملاء والاهتمامات',offers:'العروض والتخفيضات',accounting:'المحاسبة والأرباح',settings:'إعدادات المتجر'};
+const sampleOrders=[{id:'#NV-10482',customer:'عميل تجريبي',total:2499,status:'بانتظار الدفع',date:'2026-09-22'}];
+function money(v){return window.Nivora?.money(v)||`${Number(v||0).toLocaleString()} ر.س`}
+function render(page){document.querySelectorAll('[data-page]').forEach(x=>x.classList.toggle('active',x.dataset.page===page));document.getElementById('pageTitle').textContent=pages[page];const app=document.getElementById('app');
+if(page==='dashboard')app.innerHTML=`<div class="grid"><div class="card metric"><div class="label">إجمالي المبيعات</div><div class="num">${money(12480)}</div><div class="up">↗ 15% مقارنة بالفترة السابقة</div></div><div class="card metric"><div class="label">صافي الربح</div><div class="num">${money(5310)}</div><div class="up">بعد خصم التكلفة والشحن</div></div><div class="card metric"><div class="label">الطلبات</div><div class="num">24</div><div class="up">18 عميلًا جديدًا</div></div><div class="card metric"><div class="label">المخزون</div><div class="num">362</div><div class="up">12 منتج منخفض</div></div></div><div class="section grid"><div class="card" style="grid-column:span 2"><div class="section-head"><h2>حركة المبيعات</h2><span class="pill ok">آخر 7 أيام</span></div><div style="height:210px;display:flex;align-items:end;gap:8px">${[40,65,55,82,70,110,145].map((h,i)=>`<div title="اليوم ${i+1}" style="height:${h}px;flex:1;background:linear-gradient(#e3bd80,#6f4d27);border-radius:6px 6px 0 0"></div>`).join('')}</div></div><div class="card"><h2>تنبيهات</h2><p>3 منتجات منخفضة المخزون</p><p>طلبان بانتظار التأكيد</p><p>عرض واحد ينتهي قريبًا</p></div></div><div class="section card"><div class="section-head"><h2>آخر الطلبات</h2><button class="gold" onclick="render('orders')">عرض الكل</button></div><div class="table-wrap"><table class="table"><thead><tr><th>الطلب</th><th>العميل</th><th>الإجمالي</th><th>الحالة</th><th>التاريخ</th></tr></thead><tbody>${sampleOrders.map(o=>`<tr><td>${o.id}</td><td>${o.customer}</td><td>${money(o.total)}</td><td><span class="pill low">${o.status}</span></td><td>${o.date}</td></tr>`).join('')}</tbody></table></div></div>`;
+else if(page==='products')app.innerHTML=`<div class="card"><div class="section-head"><h2>المنتجات والمخزون</h2><button class="gold" onclick="render('import')">+ إضافة منتج بالرابط</button></div><div class="table-wrap"><table class="table"><thead><tr><th>المنتج</th><th>الفئة</th><th>سعر البيع</th><th>التكلفة</th><th>المخزون</th><th>الهامش</th><th>الحالة</th></tr></thead><tbody>${window.Nivora.demoProducts.map(p=>`<tr><td>${p.name_ar}</td><td>${p.category}</td><td>${money(p.price)}</td><td>${money(p.cost_price)}</td><td>${p.stock_qty}</td><td>${Math.round((p.price-p.cost_price)/p.price*100)}%</td><td><span class="pill ${p.stock_qty<5?'bad':p.stock_qty<10?'low':'ok'}">${p.stock_qty<5?'نفد قريبًا':p.stock_qty<10?'منخفض':'متوفر'}</span></td></tr>`).join('')}</tbody></table></div></div>`;
+else if(page==='import')app.innerHTML=`<div class="card"><div class="note">الصق رابط المنتج من AliExpress أو Amazon أو Alibaba أو Noon. النظام المصمم هنا يفصل بين واجهة الاستيراد وطبقة المصدر، لأن كل منصة قد تفرض حماية أو شروطًا مختلفة. الصور والوصف يجب استخدامهما وفق شروط المصدر.</div><div class="form" style="margin-top:14px"><div class="field full"><label>رابط المنتج</label><input id="sourceUrl" placeholder="https://..." inputmode="url"></div><div class="field"><label>سعر البيع</label><input id="sellPrice" type="number" placeholder="اتركه فارغًا للحساب"></div><div class="field"><label>هامش الربح %</label><input id="margin" type="number" value="35"></div><div class="field"><label>الفئة</label><select id="cat"><option value="watches">الساعات</option><option value="jewelry">الفضة والمجوهرات</option><option value="perfumes">العطور</option><option value="sunglasses">النظارات الشمسية</option></select></div><div class="field"><label>حد التنبيه للمخزون</label><input id="lowStock" type="number" value="5"></div><div class="field full"><button class="gold" onclick="startImport()">استخراج المنتج وتجهيزه</button></div></div><div id="importResult" style="margin-top:14px"></div></div>`;
+else if(page==='orders')app.innerHTML=`<div class="card"><div class="section-head"><h2>الطلبات</h2><span class="pill low">الدفع مقدمًا فقط</span></div><div class="table-wrap"><table class="table"><thead><tr><th>رقم</th><th>العميل</th><th>الإجمالي</th><th>الدفع</th><th>الحالة</th><th>الإجراء</th></tr></thead><tbody>${sampleOrders.concat([{id:'#NV-10481',customer:'عميل آخر',total:1599,status:'تم الدفع',date:'2026-09-21'}]).map(o=>`<tr><td>${o.id}</td><td>${o.customer}</td><td>${money(o.total)}</td><td>${o.status==='تم الدفع'?'<span class="pill ok">مدفوع</span>':'<span class="pill low">مقدم</span>'}</td><td>${o.status}</td><td><button class="ghost">فتح</button></td></tr>`).join('')}</tbody></table></div></div>`;
+else if(page==='customers')app.innerHTML=`<div class="grid"><div class="card metric"><div class="label">إجمالي العملاء</div><div class="num">428</div></div><div class="card metric"><div class="label">عملاء جدد</div><div class="num">18</div></div><div class="card metric"><div class="label">جلسات نشطة</div><div class="num">37</div></div><div class="card metric"><div class="label">سلات غير مكتملة</div><div class="num">12</div></div></div><div class="section card"><h2>سجل الاهتمامات</h2><p>يتم تسجيل مشاهدات المنتجات والبحث والمفضلة والسلة والشراء ضمن جلسة العميل، مع تجنب جمع بيانات غير لازمة.</p><div class="table-wrap"><table class="table"><thead><tr><th>الحدث</th><th>المنتج</th><th>الجلسة</th><th>التاريخ</th></tr></thead><tbody><tr><td>مشاهدة</td><td>ساعة كلاسيك سيلفر</td><td>جلسة تجريبية</td><td>الآن</td></tr><tr><td>إضافة للسلة</td><td>عطر Noir Élégance</td><td>جلسة تجريبية</td><td>قبل 10 دقائق</td></tr></tbody></table></div></div>`;
+else if(page==='offers')app.innerHTML=`<div class="card"><div class="section-head"><h2>العروض والتخفيضات</h2><button class="gold">+ إضافة عرض</button></div><div class="form"><div class="field"><label>اسم العرض</label><input placeholder="خصم نهاية الأسبوع"></div><div class="field"><label>نسبة الخصم</label><input type="number" placeholder="20"></div><div class="field"><label>بداية العرض</label><input type="date"></div><div class="field"><label>نهاية العرض</label><input type="date"></div><div class="field full"><label>المنتجات المشمولة</label><select><option>جميع المنتجات</option><option>الساعات</option><option>العطور</option><option>الفضة والمجوهرات</option></select></div></div></div>`;
+else if(page==='accounting')app.innerHTML=`<div class="grid"><div class="card metric"><div class="label">الإيرادات</div><div class="num">${money(12480)}</div></div><div class="card metric"><div class="label">تكلفة المنتجات</div><div class="num">${money(5700)}</div></div><div class="card metric"><div class="label">الشحن والرسوم</div><div class="num">${money(1470)}</div></div><div class="card metric"><div class="label">صافي الربح</div><div class="num">${money(5310)}</div></div></div><div class="section card"><h2>معادلة الربح</h2><p>صافي الربح = المبيعات − تكلفة المنتجات − تكلفة الشحن − الخصومات − رسوم الدفع − المصروفات الأخرى.</p><div class="note">لن يتم اعتبار الطلب إيرادًا نهائيًا قبل تسجيل حالة الدفع وفق قواعد النظام.</div></div>`;
+else app.innerHTML=`<div class="card"><h2>إعدادات NIVORA</h2><div class="form"><div class="field"><label>اسم المتجر</label><input value="NIVORA SILVER"></div><div class="field"><label>العملة</label><select><option>SAR — ريال سعودي</option><option>EGP — جنيه مصري</option></select></div><div class="field"><label>البريد الإداري</label><input type="email" placeholder="you@example.com"></div><div class="field"><label>طريقة الدفع الحالية</label><input value="الدفع مقدمًا فقط" disabled></div><div class="field full"><label>وصف المتجر</label><textarea>متجر فاخر للفضة والمجوهرات والعطور والساعات والنظارات الشمسية.</textarea></div></div><div class="note" style="margin-top:14px">بعد ربط Supabase سيتم تشغيل قاعدة البيانات، المصادقة، الطلبات، المحاسبة، التتبع، واستيراد المنتجات من خلال Edge Functions. لا تضع service-role key داخل ملفات الموقع.</div></div>`;
+}
+async function startImport(){const u=document.getElementById('sourceUrl').value.trim();const out=document.getElementById('importResult');if(!u){out.innerHTML='<div class="note">أدخل رابط المنتج أولًا.</div>';return}out.innerHTML='<div class="note">جارٍ تجهيز الرابط… في الوضع الحالي سيتم حفظ الرابط كمسودة إلى أن تربط Edge Function بالمصدر.</div>'; if(window.Nivora.hasSupabase){try{const {data,error}=await supabase.functions.invoke('import-product',{body:{url:u}});out.innerHTML=error?'<div class="note">تعذر الاستيراد التلقائي؛ استخدم الإدخال اليدوي للمسودة.</div>':`<div class="card"><b>${data?.name_ar||'منتج مستورد'}</b><p>${data?.description_ar||''}</p></div>`}catch(e){out.innerHTML='<div class="note">الاستيراد يحتاج إعداد Edge Function والمفاتيح الخاصة بالمصدر.</div>'}}}
+document.querySelectorAll('[data-page]').forEach(b=>b.onclick=()=>render(b.dataset.page));render('dashboard');if(window.Nivora.hasSupabase){document.getElementById('status').textContent='متصل بقاعدة البيانات'}
+</script></body></html>
