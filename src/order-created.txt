@@ -1,0 +1,6 @@
+NIVORA SILVER
+New order notification
+
+Order: {{orderNumber}}
+Total: {{total}}
+Payment: {{paymentStatus}}
