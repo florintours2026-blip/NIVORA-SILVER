@@ -1,5 +1,5 @@
 // assets/js/products.js
-const productsData = [
+let productsData = [
     // ===== الفضة والمجوهرات =====
     {
         id: 1,

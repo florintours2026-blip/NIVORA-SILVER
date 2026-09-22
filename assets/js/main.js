@@ -1,6 +1,23 @@
 // assets/js/main.js
 
-document.addEventListener('DOMContentLoaded', () => {
+document.addEventListener('DOMContentLoaded', async () => {
+    // 0. تحميل الكتالوج الحقيقي عند توفر Supabase، وإلا استخدم بيانات العرض التجريبية.
+    if (window.Nivora) {
+        try {
+            const live = await window.Nivora.getProducts();
+            if (live && live.length) {
+                productsData = live.map(p => ({
+                    id: p.id, nameAr: p.name_ar, nameEn: p.name_en || p.name_ar,
+                    category: p.category, categoryAr: ({jewelry:'الفضة والمجوهرات',perfumes:'العطور',watches:'الساعات',sunglasses:'النظارات الشمسية'})[p.category] || p.category,
+                    price: Number(p.price||0), oldPrice: Number(p.compare_at_price||0)||null,
+                    discount: p.compare_at_price ? Math.max(0,Math.round((1-p.price/p.compare_at_price)*100)) : 0,
+                    stock: Number(p.stock_qty||0), rating: Number(p.rating||5), reviews: Number(p.review_count||0),
+                    descriptionAr: p.description_ar || '', images: Array.isArray(p.images)?p.images:[], featured: !!p.featured, brand: p.brand || 'NIVORA',
+                    cost_price: Number(p.cost_price||0)
+                }));
+            }
+        } catch(e) { console.warn('NIVORA demo catalog fallback', e); }
+    }
     // 1. تحميل المنتجات المميزة في الصفحة الرئيسية
     loadFeaturedProducts();
     

@@ -1,15 +1,16 @@
 // assets/js/product.js
 
-document.addEventListener('DOMContentLoaded', () => {
+document.addEventListener('DOMContentLoaded', async () => {
     const urlParams = new URLSearchParams(window.location.search);
-    const productId = parseInt(urlParams.get('id'));
+    const productId = urlParams.get('id');
     
     if (!productId) {
         window.location.href = 'shop.html';
         return;
     }
     
-    const product = productsData.find(p => p.id === productId);
+    let product = productsData.find(p => String(p.id) === String(productId));
+    if (!product && window.Nivora) { product = await window.Nivora.getProduct(productId); }
     if (!product) {
         window.location.href = 'shop.html';
         return;
