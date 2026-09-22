@@ -1,168 +1,36 @@
-<!DOCTYPE html>
-<html lang="ar" dir="rtl">
-<head>
-<script src="config/config.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-<script src="assets/js/nivora-core.js"></script>
+<!doctype html>
+<html lang="ar" dir="rtl"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="description" content="NIVORA SILVER — متجر إلكتروني فاخر">
+<title>الرئيسية | NIVORA SILVER</title>
 
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>NIVORA | الفخامة والأناقة</title>
-    <!-- ملف التصميم الأساسي -->
-    <link rel="stylesheet" href="assets/css/style.css">
-    <!-- أيقونات FontAwesome -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <!-- خطوط جوجل الفاخرة -->
-    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;600;700&family=Cairo:wght@300;400;600;700&display=swap" rel="stylesheet">
-</head>
-<body>
-
-    <!-- ==================== HEADER ==================== -->
-    <header>
-        <div class="header-left">
-            <div class="logo">
-                <a href="index.html">
-                    <span class="logo-text">NIVORA</span>
-                    <span class="logo-sub">SILVER</span>
-                </a>
-            </div>
-            <nav>
-                <ul>
-                    <li><a href="index.html" class="active">الرئيسية</a></li>
-                    <li><a href="shop.html">المتجر</a></li>
-                    <li><a href="jewelry.html">الفضة والمجوهرات</a></li>
-                    <li><a href="perfumes.html">العطور</a></li>
-                    <li><a href="watches.html">الساعات</a></li>
-                    <li><a href="sunglasses.html">النظارات الشمسية</a></li>
-                </ul>
-            </nav>
-        </div>
-        <div class="header-right">
-            <i class="fa-solid fa-magnifying-glass"></i>
-            <i class="fa-regular fa-user"></i>
-            <a href="cart.html" style="position: relative;">
-                <i class="fa-solid fa-cart-shopping"></i>
-                <span class="cart-count" id="cart-count">0</span>
-            </a>
-            <span class="lang-switch">AR | EN</span>
-        </div>
-    </header>
-
-    <!-- ==================== HERO ==================== -->
-    <section class="hero">
-        <div class="hero-content">
-            <h1>كل ما يكمّل أناقتك<br>في مكان واحد</h1>
-            <p>فضة ومجوهرات • عطور • ساعات • نظارات شمسية</p>
-            <p class="sub-text">تصاميم فاخرة من أرقى الماركات العالمية</p>
-            <a href="shop.html" class="btn-gold">تسوق الآن <i class="fa-solid fa-arrow-left"></i></a>
-        </div>
-    </section>
-
-    <!-- ==================== CATEGORIES ==================== -->
-    <section class="section">
-        <div class="section-header">
-            <h2>تسوق حسب الفئة</h2>
-            <div class="divider"></div>
-            <p>اختر من بين مجموعتنا الحصرية</p>
-        </div>
-        <div class="categories-grid">
-            <!-- الفضة والمجوهرات -->
-            <a href="jewelry.html" class="category-card">
-                <img src="assets/images/categories/jewelry.jpg" alt="الفضة والمجوهرات" onerror="this.src='https://via.placeholder.com/400x400/111111/C0C0C0?text=Jewelry'">
-                <div class="category-overlay">
-                    <h3>الفضة والمجوهرات</h3>
-                    <p>تصاميم فاخرة من الفضة عيار 925</p>
-                </div>
-            </a>
-            <!-- العطور -->
-            <a href="perfumes.html" class="category-card">
-                <img src="assets/images/categories/perfumes.jpg" alt="العطور" onerror="this.src='https://via.placeholder.com/400x400/111111/C0C0C0?text=Perfumes'">
-                <div class="category-overlay">
-                    <h3>العطور</h3>
-                    <p>روائح خالدة بتركيز عالي</p>
-                </div>
-            </a>
-            <!-- الساعات -->
-            <a href="watches.html" class="category-card">
-                <img src="assets/images/categories/watches.jpg" alt="الساعات" onerror="this.src='https://via.placeholder.com/400x400/111111/C0C0C0?text=Watches'">
-                <div class="category-overlay">
-                    <h3>الساعات</h3>
-                    <p>دقة لا تُضاهى وأناقة خالدة</p>
-                </div>
-            </a>
-            <!-- النظارات الشمسية -->
-            <a href="sunglasses.html" class="category-card">
-                <img src="assets/images/categories/sunglasses.jpg" alt="النظارات الشمسية" onerror="this.src='https://via.placeholder.com/400x400/111111/C0C0C0?text=Sunglasses'">
-                <div class="category-overlay">
-                    <h3>النظارات الشمسية</h3>
-                    <p>حماية وأناقة في آن واحد</p>
-                </div>
-            </a>
-        </div>
-    </section>
-
-    <!-- ==================== FEATURED PRODUCTS ==================== -->
-    <section class="section" style="background: var(--bg-secondary);">
-        <div class="section-header">
-            <h2>منتجات مختارة</h2>
-            <div class="divider"></div>
-            <p>أجمل ما اخترناه لك</p>
-        </div>
-        <div class="products-grid" id="featured-products-grid">
-            <!-- سيتم تحميل المنتجات هنا بواسطة JavaScript من ملف main.js -->
-        </div>
-        <div style="text-align: center; margin-top: 40px;">
-            <a href="shop.html" class="btn-gold" style="display: inline-block;">عرض جميع المنتجات <i class="fa-solid fa-arrow-left"></i></a>
-        </div>
-    </section>
-
-    <!-- ==================== FOOTER ==================== -->
-    <footer>
-        <div class="footer-grid">
-            <div class="footer-col">
-                <h4>NIVORA</h4>
-                <p>متجرك الأول للفخامة والأناقة. نقدم لك أرقى المنتجات من الفضة، العطور، الساعات، والنظارات الشمسية.</p>
-            </div>
-            <div class="footer-col">
-                <h4>روابط سريعة</h4>
-                <ul>
-                    <li><a href="index.html">الرئيسية</a></li>
-                    <li><a href="shop.html">المتجر</a></li>
-                    <li><a href="about.html">من نحن</a></li>
-                    <li><a href="contact.html">اتصل بنا</a></li>
-                </ul>
-            </div>
-            <div class="footer-col">
-                <h4>خدمة العملاء</h4>
-                <ul>
-                    <li>سياسة الاستبدال</li>
-                    <li>سياسة الخصوصية</li>
-                    <li>الشروط والأحكام</li>
-                    <li>الأسئلة الشائعة</li>
-                </ul>
-            </div>
-            <div class="footer-col">
-                <h4>تواصل معنا</h4>
-                <ul>
-                    <li><i class="fa-solid fa-phone"></i> 01065859268</li>
-                    <li><i class="fa-solid fa-envelope"></i> florintoursim@gmail.com</li>
-                    <li style="margin-top: 15px;">
-                        <i class="fa-brands fa-facebook-f" style="color: var(--gold); cursor: pointer; margin: 0 5px;"></i>
-                        <i class="fa-brands fa-instagram" style="color: var(--gold); cursor: pointer; margin: 0 5px;"></i>
-                        <i class="fa-brands fa-tiktok" style="color: var(--gold); cursor: pointer; margin: 0 5px;"></i>
-                    </li>
-                </ul>
-            </div>
-        </div>
-        <div class="footer-bottom">
-            © 2025 NIVORA SILVER. جميع الحقوق محفوظة.
-        </div>
-    </footer>
-
-    <!-- ==================== SCRIPTS ==================== -->
-    <script src="assets/js/products.js"></script>
-    <script src="assets/js/main.js"></script>
-    <script src="assets/js/cart.js"></script>
-
-</body>
-</html>
+<link rel="stylesheet" href="assets/css/reset.css">
+<link rel="stylesheet" href="assets/css/variables.css">
+<link rel="stylesheet" href="assets/css/base.css">
+<link rel="stylesheet" href="assets/css/layout.css">
+<link rel="stylesheet" href="assets/css/header.css">
+<link rel="stylesheet" href="assets/css/footer.css">
+<link rel="stylesheet" href="assets/css/navigation.css">
+<link rel="stylesheet" href="assets/css/components.css">
+<link rel="stylesheet" href="assets/css/responsive.css">
+<link rel="stylesheet" href="assets/css/mobile.css">
+<link rel="stylesheet" href="assets/css/animations.css">
+<link rel="stylesheet" href="assets/css/rtl.css">
+<link rel="stylesheet" href="assets/css/home.css">
+</head><body><header class="site-header"><div class="container header-inner">
+<a class="brand" href="index.html">NIVORA <span>SILVER</span></a>
+<nav class="main-nav"><a href="shop.html">المتجر</a><a href="watches.html">الساعات</a><a href="perfumes.html">العطور</a><a href="jewelry.html">المجوهرات</a><a href="offers.html">العروض</a></nav>
+<div class="header-actions"><a href="search.html">بحث</a><a href="account.html">حسابي</a><a href="cart.html">السلة</a></div></div></header><main class="page-section"><div class="container">
+<section class="page-hero"><p class="eyebrow">NIVORA SILVER</p><h1>الرئيسية</h1><p>هذه الصفحة مجهزة للربط الديناميكي مع ملفات JavaScript وواجهة API.</p></section>
+<section class="content-section"><div class="grid-placeholder" data-page="الرئيسية"></div></section>
+</div></main><footer class="site-footer"><div class="container"><div class="brand">NIVORA <span>SILVER</span></div><p>أناقة مختارة بعناية.</p><div><a href="about.html">عن المتجر</a> · <a href="contact.html">تواصل معنا</a> · <a href="privacy.html">الخصوصية</a> · <a href="terms.html">الشروط</a></div></div></footer>
+<script src="assets/js/config.js" defer></script>
+<script src="assets/js/app.js" defer></script>
+<script src="assets/js/api.js" defer></script>
+<script src="assets/js/header.js" defer></script>
+<script src="assets/js/navigation.js" defer></script>
+<script src="assets/js/storage.js" defer></script>
+<script src="assets/js/utils.js" defer></script>
+<script src="assets/js/products.js" defer></script>
+<script src="assets/js/product-card.js" defer></script>
+<script src="assets/js/offers.js" defer></script>
+</body></html>

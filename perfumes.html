@@ -1,101 +1,37 @@
-<!DOCTYPE html>
-<html lang="ar" dir="rtl">
-<head>
-<script src="config/config.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-<script src="assets/js/nivora-core.js"></script>
+<!doctype html>
+<html lang="ar" dir="rtl"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="description" content="NIVORA SILVER — متجر إلكتروني فاخر">
+<title>العطور | NIVORA SILVER</title>
 
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>العطور | NIVORA</title>
-    <link rel="stylesheet" href="assets/css/style.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;600;700&family=Cairo:wght@300;400;600;700&display=swap" rel="stylesheet">
-</head>
-<body>
-
-    <header>
-        <div class="header-left">
-            <div class="logo">
-                <a href="index.html">
-                    <span class="logo-text">NIVORA</span>
-                    <span class="logo-sub">SILVER</span>
-                </a>
-            </div>
-            <nav>
-                <ul>
-                    <li><a href="index.html">الرئيسية</a></li>
-                    <li><a href="shop.html">المتجر</a></li>
-                    <li><a href="jewelry.html">الفضة والمجوهرات</a></li>
-                    <li><a href="perfumes.html" class="active">العطور</a></li>
-                    <li><a href="watches.html">الساعات</a></li>
-                    <li><a href="sunglasses.html">النظارات الشمسية</a></li>
-                </ul>
-            </nav>
-        </div>
-        <div class="header-right">
-            <i class="fa-solid fa-magnifying-glass"></i>
-            <i class="fa-regular fa-user"></i>
-            <a href="cart.html" style="position: relative;">
-                <i class="fa-solid fa-cart-shopping"></i>
-                <span class="cart-count" id="cart-count">0</span>
-            </a>
-            <span class="lang-switch">AR | EN</span>
-        </div>
-    </header>
-
-    <div class="page-header">
-        <h1>العطور</h1>
-        <div class="breadcrumb">
-            <a href="index.html">الرئيسية</a> / <a href="shop.html">المتجر</a> / <span>العطور</span>
-        </div>
-    </div>
-
-    <div class="shop-layout">
-        <aside class="filters-sidebar">
-            <div class="filter-group">
-                <h4>السعر</h4>
-                <input type="range" min="0" max="50000" value="50000" id="price-range">
-                <p style="color: var(--text-gray); font-size: 0.85rem; margin-top: 5px;">
-                    حتى <span id="price-display">50,000</span> ر.س
-                </p>
-            </div>
-        </aside>
-
-        <div class="shop-content">
-            <div class="shop-toolbar">
-                <input type="text" class="search-box" placeholder="ابحث في العطور...">
-                <select id="sort-select">
-                    <option value="default">الترتيب الافتراضي</option>
-                    <option value="price-asc">السعر: من الأقل للأعلى</option>
-                    <option value="price-desc">السعر: من الأعلى للأقل</option>
-                </select>
-            </div>
-
-            <div class="products-grid" id="shop-products-grid" data-category="perfumes">
-                <!-- سيتم تحميل منتجات العطور فقط -->
-            </div>
-        </div>
-    </div>
-
-    <footer>
-        <div class="footer-bottom" style="padding-top: 40px;">
-            © 2025 NIVORA SILVER. جميع الحقوق محفوظة.
-        </div>
-    </footer>
-
-    <script src="assets/js/products.js"></script>
-    <script src="assets/js/main.js"></script>
-    <script src="assets/js/cart.js"></script>
-    <script>
-        document.addEventListener('DOMContentLoaded', () => {
-            const grid = document.getElementById('shop-products-grid');
-            const category = grid.dataset.category;
-            if (category) {
-                const filtered = productsData.filter(p => p.category === category);
-                renderProductGrid(grid, filtered);
-            }
-        });
-    </script>
-</body>
-</html>
+<link rel="stylesheet" href="assets/css/reset.css">
+<link rel="stylesheet" href="assets/css/variables.css">
+<link rel="stylesheet" href="assets/css/base.css">
+<link rel="stylesheet" href="assets/css/layout.css">
+<link rel="stylesheet" href="assets/css/header.css">
+<link rel="stylesheet" href="assets/css/footer.css">
+<link rel="stylesheet" href="assets/css/navigation.css">
+<link rel="stylesheet" href="assets/css/components.css">
+<link rel="stylesheet" href="assets/css/responsive.css">
+<link rel="stylesheet" href="assets/css/mobile.css">
+<link rel="stylesheet" href="assets/css/animations.css">
+<link rel="stylesheet" href="assets/css/rtl.css">
+<link rel="stylesheet" href="assets/css/category.css">
+<link rel="stylesheet" href="assets/css/product-card.css">
+</head><body><header class="site-header"><div class="container header-inner">
+<a class="brand" href="index.html">NIVORA <span>SILVER</span></a>
+<nav class="main-nav"><a href="shop.html">المتجر</a><a href="watches.html">الساعات</a><a href="perfumes.html">العطور</a><a href="jewelry.html">المجوهرات</a><a href="offers.html">العروض</a></nav>
+<div class="header-actions"><a href="search.html">بحث</a><a href="account.html">حسابي</a><a href="cart.html">السلة</a></div></div></header><main class="page-section"><div class="container">
+<section class="page-hero"><p class="eyebrow">NIVORA SILVER</p><h1>العطور</h1><p>هذه الصفحة مجهزة للربط الديناميكي مع ملفات JavaScript وواجهة API.</p></section>
+<section class="content-section"><div class="grid-placeholder" data-page="العطور"></div></section>
+</div></main><footer class="site-footer"><div class="container"><div class="brand">NIVORA <span>SILVER</span></div><p>أناقة مختارة بعناية.</p><div><a href="about.html">عن المتجر</a> · <a href="contact.html">تواصل معنا</a> · <a href="privacy.html">الخصوصية</a> · <a href="terms.html">الشروط</a></div></div></footer>
+<script src="assets/js/config.js" defer></script>
+<script src="assets/js/app.js" defer></script>
+<script src="assets/js/api.js" defer></script>
+<script src="assets/js/header.js" defer></script>
+<script src="assets/js/navigation.js" defer></script>
+<script src="assets/js/storage.js" defer></script>
+<script src="assets/js/utils.js" defer></script>
+<script src="assets/js/products.js" defer></script>
+<script src="assets/js/product-card.js" defer></script>
+<script src="assets/js/filters.js" defer></script>
+</body></html>
