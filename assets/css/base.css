@@ -1,0 +1,1 @@
+html{scroll-behavior:smooth}body{min-height:100vh;background:var(--nv-bg);color:var(--nv-text);font-family:Arial,sans-serif}button,input,textarea,select{color:inherit;background:transparent;outline:0}input,textarea,select{border:1px solid var(--nv-border);border-radius:var(--nv-radius);padding:.75rem 1rem}::selection{background:var(--nv-gold);color:#090909}

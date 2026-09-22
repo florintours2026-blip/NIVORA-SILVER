@@ -1,0 +1,1 @@
+.account-layout{display:grid;grid-template-columns:250px minmax(0,1fr);gap:28px}.account-nav{border:1px solid var(--nv-border);border-radius:var(--nv-radius-lg);padding:12px;height:max-content}.account-nav a{display:block;padding:12px;border-radius:8px;color:var(--nv-muted)}.account-nav a.active,.account-nav a:hover{background:var(--nv-surface-2);color:var(--nv-gold)}

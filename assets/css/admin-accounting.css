@@ -1,0 +1,1 @@
+.accounting-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:16px}.finance-positive{color:var(--nv-success)}.finance-negative{color:var(--nv-danger)}.ledger{width:100%;border-collapse:collapse}.ledger td,.ledger th{padding:12px;border-bottom:1px solid var(--nv-border)}

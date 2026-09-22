@@ -1,0 +1,1 @@
+.order-status{padding:.35rem .7rem;border-radius:999px;font-size:.78rem}.order-status.pending{background:rgba(216,164,72,.15);color:var(--nv-warning)}.order-status.paid{background:rgba(57,184,120,.15);color:var(--nv-success)}.order-status.cancelled{background:rgba(217,91,85,.15);color:var(--nv-danger)}

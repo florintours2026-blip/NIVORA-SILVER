@@ -1,0 +1,1 @@
+@keyframes nv-fade-up{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:none}}.fade-up{animation:nv-fade-up .5s ease both}@media(prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition:none!important;scroll-behavior:auto!important}}

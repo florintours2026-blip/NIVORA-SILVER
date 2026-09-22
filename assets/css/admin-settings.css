@@ -1,0 +1,1 @@
+.settings-layout{display:grid;grid-template-columns:240px minmax(0,1fr);gap:24px}.settings-panel{padding:24px;background:var(--nv-surface);border:1px solid var(--nv-border);border-radius:var(--nv-radius-lg)}.setting-row{display:flex;justify-content:space-between;align-items:center;gap:20px;padding:16px 0;border-bottom:1px solid var(--nv-border)}

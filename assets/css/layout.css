@@ -1,0 +1,1 @@
+.container{width:min(100% - 32px,var(--nv-container));margin-inline:auto}.section{padding:72px 0}.grid{display:grid;gap:20px}.flex{display:flex}.items-center{align-items:center}.justify-between{justify-content:space-between}

@@ -1,0 +1,1 @@
+.inventory-alert{border-inline-start:3px solid var(--nv-warning);padding:12px 16px;background:rgba(216,164,72,.08)}.inventory-danger{border-inline-start-color:var(--nv-danger)}.stock-meter{height:7px;border-radius:99px;background:#202124;overflow:hidden}.stock-meter span{display:block;height:100%;background:var(--nv-gold)}

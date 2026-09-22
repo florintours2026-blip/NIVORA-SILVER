@@ -1,0 +1,1 @@
+.site-footer{margin-top:80px;background:#050505;border-top:1px solid var(--nv-border)}.footer-grid{display:grid;grid-template-columns:2fr repeat(3,1fr);gap:40px;padding:60px 0}.footer-title{color:var(--nv-gold);margin-bottom:16px}.footer-bottom{border-top:1px solid var(--nv-border);padding:20px 0;color:var(--nv-muted)}

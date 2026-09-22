@@ -1,0 +1,1 @@
+.nav{display:flex;align-items:center;gap:26px}.nav a{color:var(--nv-muted);transition:color var(--nv-transition)}.nav a:hover,.nav a.active{color:var(--nv-gold)}.mobile-menu{display:none}

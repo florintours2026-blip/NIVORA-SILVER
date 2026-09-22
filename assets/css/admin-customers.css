@@ -1,0 +1,1 @@
+.customer-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}.customer-card{padding:18px;background:var(--nv-surface);border:1px solid var(--nv-border);border-radius:var(--nv-radius-lg)}.customer-profile{display:grid;grid-template-columns:280px 1fr;gap:24px}

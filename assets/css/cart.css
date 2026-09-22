@@ -1,0 +1,1 @@
+.cart-layout{display:grid;grid-template-columns:minmax(0,1fr) 380px;gap:28px}.cart-item{display:grid;grid-template-columns:100px 1fr auto;gap:18px;align-items:center;padding:18px 0;border-bottom:1px solid var(--nv-border)}.cart-summary{padding:24px;position:sticky;top:100px;height:max-content}

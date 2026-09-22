@@ -1,0 +1,1 @@
+.hero{min-height:680px;display:grid;place-items:center;position:relative;overflow:hidden}.hero-content{position:relative;z-index:2;max-width:720px;text-align:center}.hero-title{font-family:Georgia,serif;font-size:clamp(2.8rem,6vw,6rem);font-weight:400}.hero-subtitle{color:var(--nv-muted);margin:20px 0 30px}.featured-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:18px}

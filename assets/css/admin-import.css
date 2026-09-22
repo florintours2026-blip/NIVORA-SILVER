@@ -1,0 +1,1 @@
+.import-box{padding:24px;border:1px dashed var(--nv-gold);border-radius:var(--nv-radius-lg);background:rgba(215,180,123,.04)}.import-url{display:flex;gap:10px}.import-preview{display:grid;grid-template-columns:repeat(5,1fr);gap:10px;margin-top:18px}.import-preview img{aspect-ratio:1/1;object-fit:cover;border-radius:8px;border:1px solid var(--nv-border)}

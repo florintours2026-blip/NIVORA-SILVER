@@ -1,0 +1,1 @@
+.site-header{position:sticky;top:0;z-index:100;background:rgba(7,7,7,.94);backdrop-filter:blur(16px);border-bottom:1px solid var(--nv-border)}.header-inner{min-height:78px;display:flex;align-items:center;gap:24px}.brand{font-family:Georgia,serif;letter-spacing:.25em;color:var(--nv-gold)}.header-actions{margin-inline-start:auto;display:flex;align-items:center;gap:12px}
