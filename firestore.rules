@@ -2,53 +2,59 @@ rules_version = '2';
 service cloud.firestore {
   match /databases/{database}/documents {
     function signedIn() { return request.auth != null; }
-    function admin() {
-      return signedIn() &&
-        get(/databases/$(database)/documents/admins/$(request.auth.uid)).data.role in ['admin', 'manager'];
+    function adminDoc() { return get(/databases/$(database)/documents/admins/$(request.auth.uid)); }
+    function isAdmin() {
+      return signedIn() && adminDoc().exists() &&
+        (adminDoc().data.role == 'admin' || adminDoc().data.role == 'manager');
     }
+    function isEmployee() {
+      return signedIn() && exists(/databases/$(database)/documents/users/$(request.auth.uid)) &&
+        get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == 'employee';
+    }
+    function staff() { return isAdmin() || isEmployee(); }
     function owner(uid) { return signedIn() && request.auth.uid == uid; }
 
+    // صلاحيات الإدارة الحالية: admins/{Firebase UID}.role
     match /admins/{uid} {
-      // An authenticated user may read only their own admin record.
-      // This is what lets the client verify the admin role without custom claims.
-      allow read: if signedIn() && request.auth.uid == uid;
-      allow create, update, delete: if false;
+      allow read: if owner(uid) || isAdmin();
+      allow create, update, delete: if isAdmin() && !owner(uid);
     }
 
     match /users/{uid} {
-      allow create: if owner(uid);
-      allow read: if owner(uid) || admin();
-      allow update: if owner(uid) || admin();
-      allow delete: if admin();
+      allow create: if owner(uid) && request.resource.data.role == 'customer';
+      allow read: if owner(uid) || isAdmin();
+      allow update: if isAdmin() || (owner(uid) && request.resource.data.role == resource.data.role);
+      allow delete: if isAdmin();
     }
 
     match /products/{id} {
       allow read: if true;
-      allow create, update, delete: if admin();
+      allow create, update, delete: if isAdmin();
     }
 
     match /orders/{id} {
       allow create: if signedIn() && request.resource.data.customerId == request.auth.uid;
-      allow read: if admin() || (signedIn() && resource.data.customerId == request.auth.uid);
-      allow update: if admin();
-      allow delete: if admin();
+      allow read: if staff() || (signedIn() && resource.data.customerId == request.auth.uid);
+      allow update: if staff();
+      allow delete: if isAdmin();
     }
 
     match /transactions/{id} {
-      allow read, write: if admin();
+      allow read, write: if isAdmin();
     }
-
     match /expenses/{id} {
-      allow read, write: if admin();
+      allow read, write: if isAdmin();
     }
-
     match /refunds/{id} {
-      allow read, write: if admin();
+      allow read, write: if isAdmin();
     }
-
     match /settings/{id} {
       allow read: if true;
-      allow write: if admin();
+      allow write: if isAdmin();
+    }
+    match /offers/{id} {
+      allow read: if true;
+      allow create, update, delete: if isAdmin();
     }
   }
 }
