@@ -7,7 +7,7 @@ window.renderProductCard = function(product) {
     </a>
     <div class="product-card-body">
       <h3 class="product-card-title">${product.name || ""}</h3>
-      <div class="product-card-price">${product.price ?? ""} ${product.currency || "SAR"}</div>
+      <div class="product-card-price">${product.price ?? ""} ${product.currency || "EGP"}</div>
     </div>
   </article>`;
 };

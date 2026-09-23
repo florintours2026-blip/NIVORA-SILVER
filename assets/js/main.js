@@ -87,7 +87,7 @@ function renderProductGrid(container, products) {
             ? `<span class="badge">-${product.discount}%</span>` 
             : '';
         const oldPriceHtml = product.oldPrice 
-            ? `<span class="old-price">${product.oldPrice} ر.س</span>` 
+            ? `<span class="old-price">${product.oldPrice} ج.م</span>` 
             : '';
         
         html += `
@@ -102,7 +102,7 @@ function renderProductGrid(container, products) {
                     <span style="color: var(--text-gray);">(${product.reviews})</span>
                 </div>
                 <div class="price">
-                    ${product.price} ر.س
+                    ${product.price} ج.م
                     ${oldPriceHtml}
                 </div>
                 <div class="actions">

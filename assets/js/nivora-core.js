@@ -2,7 +2,7 @@
 (function(){
   const cfg = window.NIVORA_CONFIG || {};
   const hasSupabase = !!(cfg.SUPABASE_URL && cfg.SUPABASE_ANON_KEY && window.supabase);
-  const money = (v) => new Intl.NumberFormat(cfg.STORE_LOCALE || 'ar-SA',{style:'currency',currency:cfg.STORE_CURRENCY||'SAR',maximumFractionDigits:2}).format(Number(v||0));
+  const money = (v) => new Intl.NumberFormat(cfg.STORE_LOCALE || 'ar-EG',{style:'currency',currency:cfg.STORE_CURRENCY||'EGP',maximumFractionDigits:2}).format(Number(v||0));
   const getLocal = (k, fallback) => { try { return JSON.parse(localStorage.getItem(k)) ?? fallback; } catch { return fallback; } };
   const setLocal = (k,v) => localStorage.setItem(k, JSON.stringify(v));
   const demoProducts = [

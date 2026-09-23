@@ -6,5 +6,5 @@ document.addEventListener("DOMContentLoaded", async () => {
   const product = products.find(p => String(p.id) === String(id));
   if (!product) return;
   document.querySelectorAll("[data-product-name]").forEach(el => el.textContent = product.name || "");
-  document.querySelectorAll("[data-product-price]").forEach(el => el.textContent = `${product.price ?? ""} ${product.currency || "SAR"}`);
+  document.querySelectorAll("[data-product-price]").forEach(el => el.textContent = `${product.price ?? ""} ${product.currency || "EGP"}`);
 });
