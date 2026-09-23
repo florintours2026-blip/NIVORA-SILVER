@@ -1,17 +1,27 @@
-# تشغيل NIVORA من الهاتف فقط
+# تشغيل NIVORA SILVER من الهاتف فقط
 
-## أبسط طريقة
-1. أنشئ حساب GitHub من الهاتف.
-2. أنشئ مستودعًا جديدًا.
-3. ارفع محتويات ZIP.
-4. أنشئ مشروع Supabase من الهاتف.
-5. شغّل `supabase/schema.sql` في SQL Editor.
-6. ضع قيم Supabase في `config/config.js`.
-7. فعّل GitHub Pages أو أي Static Host.
-8. افتح `/admin.html` من متصفح الهاتف.
+هذا التحديث مخصص للعمل من الهاتف، ولا يحتاج إلى VS Code في مرحلة إعداد Firebase الأساسية.
 
-## قبل الإطلاق
-لا تضع كلمات مرور أو service-role keys داخل GitHub. استخدم فقط publishable/anon key في المتصفح مع RLS صحيح.
+## 1) استبدال الملفات
+انسخ الملفات الموجودة داخل هذا التحديث إلى مشروع NIVORA واستبدل الملفات التي تحمل نفس المسار والاسم. لا تحذف أي ملف آخر من المشروع.
 
-## الاستيراد
-الصق رابط المنتج داخل لوحة الإدارة. إذا لم يكن المصدر موصولًا بAdapter رسمي/مسموح، ستظهر المسودة ويُكمل المسؤول البيانات يدويًا. هذا مقصود حتى لا تعتمد NIVORA على scraping غير مستقر.
+الملفات في هذا التحديث فقط:
+- `assets/js/firebase-config.js` — إعداد Firebase الخاص بمشروع NIVORA.
+- `assets/js/firebase-init.js` — ربط Authentication وFirestore.
+- `assets/js/site.js` — دخول لوحة الإدارة والمحاسبة.
+- `firestore.rules` — صلاحيات Firestore.
+
+## 2) Firebase Console من الهاتف
+تأكد من أن Authentication > Sign-in method يحتوي على Email/Password، وأن Firestore Database موجود.
+
+## 3) نشر Firestore Rules
+من Firebase Console افتح Firestore Database > Rules، استبدل القواعد بمحتوى `firestore.rules` الموجود في هذا التحديث، ثم اضغط Publish.
+
+## 4) حساب الإدارة
+استخدم حساب الإدارة الذي أنشأته في Firebase Authentication. في هذا الإصدار، البريد المحدد داخل صلاحيات المشروع هو حساب الإدارة، لذلك لا تحتاج إلى Cloud Functions أو جهاز كمبيوتر لتفعيل Custom Claims.
+
+## 5) ملاحظة أمنية
+هذا الحل مناسب لتشغيل المشروع من الهاتف، لكنه يعتمد على حساب إدارة واحد محدد بالبريد الإلكتروني بدل Custom Claims. لاحقًا، عند توفر بيئة تطوير، يمكن نقل الصلاحية إلى Custom Claims بدون تغيير بيانات المنتجات والطلبات.
+
+## 6) الصور
+Firebase Storage غير مطلوب لتشغيل المتجر والطلبات والمحاسبة الأساسية. رفع صور المنتجات إلى Firebase Storage يبقى مرحلة مستقلة.
