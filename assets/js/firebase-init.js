@@ -4,7 +4,7 @@ import { getFirestore, collection, doc, getDoc, getDocs, addDoc, setDoc, updateD
 import { getStorage, ref, uploadBytes, getDownloadURL, deleteObject } from "https://www.gstatic.com/firebasejs/12.19.0/firebase-storage.js";
 
 const config = window.NIVORA_FIREBASE_CONFIG || {};
-const configured = Boolean(config.apiKey && config.authDomain && config.projectId && !String(config.apiKey).startsWith("YOUR_"));
+const configured = config.apiKey && !String(config.apiKey).startsWith("YOUR_");
 
 if (!configured) {
   window.NivoraFirebase = { enabled:false };
@@ -35,31 +35,19 @@ if (!configured) {
       const snap = await getDoc(doc(db,"users",auth.currentUser.uid));
       return snap.exists()?{id:snap.id,...snap.data()}:null;
     },
-    async getRole(){
+    async isAdmin(){
+      if(!auth.currentUser) return false;
+      // NIVORA uses the existing Firestore collection: admins/{Firebase Auth UID}
+      // No custom claims, Cloud Functions, or paid Firebase services are required.
+      const adminSnap = await getDoc(doc(db,"admins",auth.currentUser.uid));
+      if(!adminSnap.exists()) return false;
+      const role = String(adminSnap.data()?.role || "").toLowerCase().trim();
+      return role === "admin" || role === "manager";
+    },
+    async getAdminProfile(){
       if(!auth.currentUser) return null;
-      const token = await auth.currentUser.getIdTokenResult();
-      if(token.claims.admin === true || token.claims.role === "admin") return "admin";
-      const profile = await this.getCurrentUserProfile();
-      return profile?.role || token.claims.role || "customer";
-    },
-    async isAdmin(){ return (await this.getRole()) === "admin"; },
-    async isEmployee(){
-      const role = await this.getRole();
-      return ["employee","manager","admin"].includes(role);
-    },
-    async saveOffer(offer){
-      if(!(await this.isAdmin())) throw new Error("ليس لديك صلاحية إدارة العروض");
-      const id=offer.id || doc(collection(db,"offers")).id;
-      await setDoc(doc(db,"offers",id),{...offer,id,updatedAt:serverTimestamp()},{merge:true});
-      return id;
-    },
-    async listOffers(max=200){
-      const snap=await getDocs(query(collection(db,"offers"),limit(max)));
-      return snap.docs.map(d=>({id:d.id,...d.data()}));
-    },
-    async deleteOffer(id){
-      if(!(await this.isAdmin())) throw new Error("ليس لديك صلاحية إدارة العروض");
-      await deleteDoc(doc(db,"offers",id));
+      const snap = await getDoc(doc(db,"admins",auth.currentUser.uid));
+      return snap.exists()?{id:snap.id,...snap.data()}:null;
     },
     async createOrder(order){
       if(!auth.currentUser) throw new Error("يجب تسجيل الدخول قبل إتمام الطلب");
