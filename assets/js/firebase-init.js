@@ -4,7 +4,7 @@ import { getFirestore, collection, doc, getDoc, getDocs, addDoc, setDoc, updateD
 import { getStorage, ref, uploadBytes, getDownloadURL, deleteObject } from "https://www.gstatic.com/firebasejs/12.19.0/firebase-storage.js";
 
 const config = window.NIVORA_FIREBASE_CONFIG || {};
-const configured = config.apiKey && !String(config.apiKey).startsWith("YOUR_");
+const configured = Boolean(config.apiKey && config.authDomain && config.projectId && !String(config.apiKey).startsWith("YOUR_"));
 
 if (!configured) {
   window.NivoraFirebase = { enabled:false };
@@ -37,26 +37,28 @@ if (!configured) {
     },
     async getRole(){
       if(!auth.currentUser) return null;
-      const snap = await getDoc(doc(db,"users",auth.currentUser.uid));
-      return snap.exists() ? (snap.data().role || "customer") : "customer";
+      const token = await auth.currentUser.getIdTokenResult();
+      if(token.claims.admin === true || token.claims.role === "admin") return "admin";
+      const profile = await this.getCurrentUserProfile();
+      return profile?.role || token.claims.role || "customer";
     },
-    async isAdmin(){
+    async isAdmin(){ return (await this.getRole()) === "admin"; },
+    async isEmployee(){
       const role = await this.getRole();
-      return role === "admin" || role === "manager";
+      return ["employee","manager","admin"].includes(role);
     },
-    async isEmployee(){ return (await this.getRole()) === "employee"; },
     async saveOffer(offer){
-      if(!auth.currentUser || !(await this.isAdmin())) throw new Error("غير مصرح");
-      const id = offer.id || doc(collection(db,"offers")).id;
-      await setDoc(doc(db,"offers",id),{...offer,id,updatedAt:serverTimestamp(),createdAt:offer.createdAt||serverTimestamp()},{merge:true});
+      if(!(await this.isAdmin())) throw new Error("ليس لديك صلاحية إدارة العروض");
+      const id=offer.id || doc(collection(db,"offers")).id;
+      await setDoc(doc(db,"offers",id),{...offer,id,updatedAt:serverTimestamp()},{merge:true});
       return id;
     },
-    async listOffers(max=100){
-      const snap=await getDocs(query(collection(db,"offers"),orderBy("createdAt","desc"),limit(max)));
+    async listOffers(max=200){
+      const snap=await getDocs(query(collection(db,"offers"),limit(max)));
       return snap.docs.map(d=>({id:d.id,...d.data()}));
     },
     async deleteOffer(id){
-      if(!auth.currentUser || !(await this.isAdmin())) throw new Error("غير مصرح");
+      if(!(await this.isAdmin())) throw new Error("ليس لديك صلاحية إدارة العروض");
       await deleteDoc(doc(db,"offers",id));
     },
     async createOrder(order){
