@@ -1,0 +1,15 @@
+rules_version = '2';
+service firebase.storage {
+  match /b/{bucket}/o {
+    function admin() { return request.auth != null && (request.auth.token.admin == true || request.auth.token.role == 'admin'); }
+    match /products/{productId}/{fileName} {
+      allow read: if true;
+      allow write: if admin() && request.resource.size < 10 * 1024 * 1024;
+      allow delete: if admin();
+    }
+    match /{allPaths=**} {
+      allow read: if true;
+      allow write: if false;
+    }
+  }
+}
