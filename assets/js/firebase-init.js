@@ -35,19 +35,18 @@ if (!configured) {
       const snap = await getDoc(doc(db,"users",auth.currentUser.uid));
       return snap.exists()?{id:snap.id,...snap.data()}:null;
     },
-    async isAdmin(){
-      if(!auth.currentUser) return false;
-      // NIVORA uses the existing Firestore collection: admins/{Firebase Auth UID}
-      // No custom claims, Cloud Functions, or paid Firebase services are required.
-      const adminSnap = await getDoc(doc(db,"admins",auth.currentUser.uid));
-      if(!adminSnap.exists()) return false;
-      const role = String(adminSnap.data()?.role || "").toLowerCase().trim();
-      return role === "admin" || role === "manager";
-    },
-    async getAdminProfile(){
+    async getAdminRecord(){
       if(!auth.currentUser) return null;
       const snap = await getDoc(doc(db,"admins",auth.currentUser.uid));
       return snap.exists()?{id:snap.id,...snap.data()}:null;
+    },
+    async isAdmin(){
+      if(!auth.currentUser) return false;
+      // NIVORA uses Firestore /admins/{Firebase Auth UID}. No custom claims required.
+      const snap = await getDoc(doc(db,"admins",auth.currentUser.uid));
+      if(!snap.exists()) return false;
+      const role = String(snap.data()?.role || "").toLowerCase().trim();
+      return role === "admin" || role === "manager";
     },
     async createOrder(order){
       if(!auth.currentUser) throw new Error("يجب تسجيل الدخول قبل إتمام الطلب");
