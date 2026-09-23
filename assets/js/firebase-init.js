@@ -1,66 +1,161 @@
-if (!window.NIVORA_NEEDS_FIREBASE) {
-  window.NivoraFirebase = { enabled:false };
-  window.NivoraFirebaseReady = Promise.resolve(window.NivoraFirebase);
+import { initializeApp } from "https://www.gstatic.com/firebasejs/12.19.0/firebase-app.js";
+import { getAuth, onAuthStateChanged, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, updateProfile, sendPasswordResetEmail } from "https://www.gstatic.com/firebasejs/12.19.0/firebase-auth.js";
+import { getFirestore, collection, doc, getDoc, getDocs, addDoc, setDoc, updateDoc, deleteDoc, query, orderBy, limit, serverTimestamp } from "https://www.gstatic.com/firebasejs/12.19.0/firebase-firestore.js";
+import { getStorage, ref, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/12.19.0/firebase-storage.js";
+
+const config = window.NIVORA_FIREBASE_CONFIG || {};
+const configured = !!(config.apiKey && config.projectId && !String(config.apiKey).startsWith("YOUR_"));
+
+if (!configured) {
+  const api = { enabled:false, auth:null, db:null, storage:null };
+  window.NivoraFirebase = api;
+  window.NivoraFirebaseReady = Promise.resolve(api);
+  window.NivoraAuthReady = Promise.resolve(null);
 } else {
-  window.NivoraFirebaseReady = (async () => {
-    const [{initializeApp},{getAuth,onAuthStateChanged,createUserWithEmailAndPassword,signInWithEmailAndPassword,signOut,updateProfile,sendPasswordResetEmail},{getFirestore,collection,doc,getDoc,getDocs,addDoc,setDoc,query,orderBy,limit,serverTimestamp,deleteDoc}] = await Promise.all([
-      import("https://www.gstatic.com/firebasejs/12.19.0/firebase-app.js"),
-      import("https://www.gstatic.com/firebasejs/12.19.0/firebase-auth.js"),
-      import("https://www.gstatic.com/firebasejs/12.19.0/firebase-firestore.js")
-    ]);
-    const config=window.NIVORA_FIREBASE_CONFIG||{};
-    if(!(config.apiKey && config.projectId && !String(config.apiKey).startsWith("YOUR_"))){
-      window.NivoraFirebase={enabled:false}; return window.NivoraFirebase;
-    }
-    const app=initializeApp(config), auth=getAuth(app), db=getFirestore(app);
-    async function getRoleForUser(user=auth.currentUser){
-      if(!user)return null;
-      const a=await getDoc(doc(db,"admins",user.uid));
-      if(a.exists()){
-        const r=String(a.data().role||"").toLowerCase();
-        if(r==="admin"||r==="manager")return r;
+  try {
+    const app = initializeApp(config);
+    const auth = getAuth(app);
+    const db = getFirestore(app);
+    const storage = getStorage(app);
+    let resolveAuthReady;
+    const authReady = new Promise(resolve => { resolveAuthReady = resolve; });
+    let firstAuthState = true;
+
+    onAuthStateChanged(auth, user => {
+      if (firstAuthState) {
+        firstAuthState = false;
+        resolveAuthReady(user || null);
       }
-      const u=await getDoc(doc(db,"users",user.uid));
-      if(u.exists()){
-        const r=String(u.data().role||"customer").toLowerCase();
-        if(r==="employee")return "employee";
-        if(r==="admin"||r==="manager")return r;
-        return "customer";
-      }
-      return "customer";
-    }
-    const api={
-      enabled:true,app,auth,db,onAuthStateChanged,
+      window.dispatchEvent(new CustomEvent("nivora-auth-changed", { detail:user || null }));
+    });
+
+    const api = {
+      enabled:true, app, auth, db, storage,
+      authReady,
+      onAuthStateChanged,
       async register(name,email,password){
-        const c=await createUserWithEmailAndPassword(auth,email,password);
-        if(name)await updateProfile(c.user,{displayName:name});
-        await setDoc(doc(db,"users",c.user.uid),{uid:c.user.uid,name:name||email.split("@")[0],email:c.user.email,role:"customer",createdAt:serverTimestamp(),updatedAt:serverTimestamp()},{merge:true});
-        return c.user;
+        const cred = await createUserWithEmailAndPassword(auth,email,password);
+        if(name) await updateProfile(cred.user,{displayName:name});
+        await setDoc(doc(db,"users",cred.user.uid),{
+          uid:cred.user.uid,
+          name:name || email.split("@")[0],
+          email:cred.user.email,
+          role:"customer",
+          createdAt:serverTimestamp(),
+          updatedAt:serverTimestamp()
+        },{merge:true});
+        return cred.user;
       },
-      async login(email,password){return (await signInWithEmailAndPassword(auth,email,password)).user;},
-      async logout(){return signOut(auth);},
-      async resetPassword(email){return sendPasswordResetEmail(auth,email);},
-      async getRole(){return getRoleForUser();},
-      async isAdmin(){const r=await getRoleForUser();return r==="admin"||r==="manager";},
-      async getCurrentUserProfile(){if(!auth.currentUser)return null;const s=await getDoc(doc(db,"users",auth.currentUser.uid));return s.exists()?{id:s.id,...s.data()}:null;},
+      async login(email,password){
+        const cred = await signInWithEmailAndPassword(auth,email,password);
+        return cred.user;
+      },
+      async logout(){ return signOut(auth); },
+      async resetPassword(email){ return sendPasswordResetEmail(auth,email); },
+      async currentUser(){
+        await authReady;
+        return auth.currentUser || null;
+      },
+      async getCurrentUserProfile(){
+        const user = await api.currentUser();
+        if(!user) return null;
+        const snap = await getDoc(doc(db,"users",user.uid));
+        return snap.exists()?{id:snap.id,...snap.data()}:{uid:user.uid,email:user.email,name:user.displayName||user.email?.split("@")[0]||"",role:"customer"};
+      },
+      async getAdminRecord(){
+        const user = await api.currentUser();
+        if(!user) return null;
+        const snap = await getDoc(doc(db,"admins",user.uid));
+        return snap.exists()?{id:snap.id,...snap.data()}:null;
+      },
+      async getRole(){
+        const user = await api.currentUser();
+        if(!user) return null;
+        const adminRecord = await api.getAdminRecord();
+        if(adminRecord?.role) return String(adminRecord.role).toLowerCase();
+        const profile = await api.getCurrentUserProfile();
+        return profile?.role || "customer";
+      },
+      async isAdmin(){
+        const role = await api.getRole();
+        return role === "admin" || role === "manager";
+      },
+      async isStaff(){
+        const role = await api.getRole();
+        return ["admin","manager","employee"].includes(role);
+      },
       async createOrder(order){
-        if(!auth.currentUser)throw new Error("يجب تسجيل الدخول قبل إتمام الطلب");
-        const r=doc(collection(db,"orders")),now=serverTimestamp();
-        await setDoc(r,{...order,customerId:auth.currentUser.uid,createdAt:now,updatedAt:now,id:r.id});return r.id;
+        const user = await api.currentUser();
+        if(!user) throw new Error("يجب تسجيل الدخول قبل إتمام الطلب");
+        const orderRef = doc(collection(db,"orders"));
+        const now = serverTimestamp();
+        const payload = {...order,customerId:user.uid,createdAt:now,updatedAt:now};
+        await setDoc(orderRef,{...payload,id:orderRef.id});
+        try {
+          await setDoc(doc(db,"transactions",orderRef.id),{
+            type:"sale",orderId:orderRef.id,amount:Number(order.total||0),currency:"EGP",
+            status:"pending",createdAt:now,createdBy:user.uid
+          });
+        } catch (e) { console.warn("Transaction record skipped",e); }
+        return orderRef.id;
       },
-      async listOrders(max=200){const s=await getDocs(query(collection(db,"orders"),orderBy("createdAt","desc"),limit(max)));return s.docs.map(d=>({id:d.id,...d.data()}));},
-      async listProducts(max=200){const s=await getDocs(query(collection(db,"products"),limit(max)));return s.docs.map(d=>({id:d.id,...d.data()}));},
-      async saveProduct(p){const id=p.id||doc(collection(db,"products")).id;await setDoc(doc(db,"products",id),{...p,id,updatedAt:serverTimestamp()},{merge:true});return id;},
-      async listOffers(max=100){const s=await getDocs(query(collection(db,"offers"),orderBy("createdAt","desc"),limit(max)));return s.docs.map(d=>({id:d.id,...d.data()}));},
-      async saveOffer(o){const id=o.id||doc(collection(db,"offers")).id;await setDoc(doc(db,"offers",id),{...o,id,updatedAt:serverTimestamp()},{merge:true});return id;},
-      async deleteOffer(id){await deleteDoc(doc(db,"offers",id));},
-      async listExpenses(max=500){const s=await getDocs(query(collection(db,"expenses"),orderBy("date","desc"),limit(max)));return s.docs.map(d=>({id:d.id,...d.data()}));},
-      async addExpense(e){const r=await addDoc(collection(db,"expenses"),{...e,amount:Number(e.amount||0),currency:"EGP",createdAt:serverTimestamp()});return r.id;},
-      async addTransaction(t){const r=await addDoc(collection(db,"transactions"),{...t,amount:Number(t.amount||0),currency:"EGP",createdAt:serverTimestamp()});return r.id;},
-      async listTransactions(max=500){const s=await getDocs(query(collection(db,"transactions"),orderBy("createdAt","desc"),limit(max)));return s.docs.map(d=>({id:d.id,...d.data()}));}
+      async listOrders(max=200){
+        const snap = await getDocs(query(collection(db,"orders"),orderBy("createdAt","desc"),limit(max)));
+        return snap.docs.map(d=>({id:d.id,...d.data()}));
+      },
+      async listExpenses(max=500){
+        const snap=await getDocs(query(collection(db,"expenses"),orderBy("date","desc"),limit(max)));
+        return snap.docs.map(d=>({id:d.id,...d.data()}));
+      },
+      async addExpense(expense){
+        const refDoc=await addDoc(collection(db,"expenses"),{...expense,amount:Number(expense.amount||0),currency:"EGP",createdAt:serverTimestamp()});
+        return refDoc.id;
+      },
+      async addTransaction(tx){
+        const refDoc=await addDoc(collection(db,"transactions"),{...tx,amount:Number(tx.amount||0),currency:"EGP",createdAt:serverTimestamp()});
+        return refDoc.id;
+      },
+      async listTransactions(max=500){
+        const snap=await getDocs(query(collection(db,"transactions"),orderBy("createdAt","desc"),limit(max)));
+        return snap.docs.map(d=>({id:d.id,...d.data()}));
+      },
+      async listProducts(max=500){
+        const snap=await getDocs(query(collection(db,"products"),limit(max)));
+        return snap.docs.map(d=>({id:d.id,...d.data()}));
+      },
+      async saveProduct(product){
+        const id=product.id || doc(collection(db,"products")).id;
+        await setDoc(doc(db,"products",id),{...product,id,updatedAt:serverTimestamp()},{merge:true});
+        return id;
+      },
+      async listOffers(max=100){
+        const snap=await getDocs(query(collection(db,"offers"),orderBy("createdAt","desc"),limit(max)));
+        return snap.docs.map(d=>({id:d.id,...d.data()}));
+      },
+      async saveOffer(offer){
+        const id=offer.id || doc(collection(db,"offers")).id;
+        await setDoc(doc(db,"offers",id),{...offer,id,updatedAt:serverTimestamp(),createdAt:offer.createdAt||serverTimestamp()},{merge:true});
+        return id;
+      },
+      async deleteOffer(id){
+        await deleteDoc(doc(db,"offers",id));
+      },
+      async uploadProductImage(file,productId){
+        const user = await api.currentUser();
+        if(!user) throw new Error("يجب تسجيل الدخول");
+        const r=ref(storage,`products/${productId}/${Date.now()}-${file.name}`);
+        await uploadBytes(r,file,{contentType:file.type});
+        return getDownloadURL(r);
+      }
     };
-    window.NivoraFirebase=api;
-    await new Promise(resolve=>{let done=false;const finish=()=>{if(!done){done=true;resolve()}};onAuthStateChanged(auth,finish);setTimeout(finish,1200)});
-    return api;
-  })().catch(err=>{console.error("NIVORA Firebase init",err);window.NivoraFirebase={enabled:false,error:err};return window.NivoraFirebase;});
+    window.NivoraFirebase = api;
+    window.NivoraFirebaseReady = Promise.resolve(api);
+    window.NivoraAuthReady = authReady;
+  } catch (error) {
+    console.error("NIVORA Firebase initialization failed", error);
+    const api = { enabled:false, error };
+    window.NivoraFirebase = api;
+    window.NivoraFirebaseReady = Promise.resolve(api);
+    window.NivoraAuthReady = Promise.resolve(null);
+  }
 }

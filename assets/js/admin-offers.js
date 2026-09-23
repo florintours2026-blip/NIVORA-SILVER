@@ -1,8 +1,8 @@
-// NIVORA — Firestore offers manager
+// NIVORA — Admin offers
 window.NivoraAdminOffers = {
-  async create(data){
-    if(!window.NivoraFirebase?.enabled) throw new Error("Firebase غير مفعّل");
-    return window.NivoraFirebase.saveOffer({...data,active:true});
-  },
-  async remove(id){ return window.NivoraFirebase.deleteOffer(id); }
+  create(data) {
+    const offers = JSON.parse(localStorage.getItem("nivora_offers") || "[]");
+    const item = { ...data, id: data.id || crypto.randomUUID() };
+    offers.push(item); localStorage.setItem("nivora_offers", JSON.stringify(offers)); return item;
+  }
 };
