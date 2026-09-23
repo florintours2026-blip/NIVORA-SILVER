@@ -1,10 +1,8 @@
-// Firebase Web configuration for NIVORA SILVER.
-// Replace the placeholder values with the Web App config from Firebase Console.
 window.NIVORA_FIREBASE_CONFIG = {
-  apiKey: "YOUR_API_KEY",
-  authDomain: "YOUR_PROJECT_ID.firebaseapp.com",
-  projectId: "YOUR_PROJECT_ID",
-  storageBucket: "YOUR_PROJECT_ID.firebasestorage.app",
-  messagingSenderId: "YOUR_MESSAGING_SENDER_ID",
-  appId: "YOUR_APP_ID"
+  apiKey: "AIzaSyDDlB5gISI6wKDkguaCxWG3zJ2hM7JnQAU",
+  authDomain: "nivora-silver.firebaseapp.com",
+  projectId: "nivora-silver",
+  storageBucket: "nivora-silver.firebasestorage.app",
+  messagingSenderId: "1098414574187",
+  appId: "1:1098414574187:web:f0225f4a73ac673d9eff2e"
 };
