@@ -1,3 +1,5 @@
+// Firebase Web configuration for NIVORA SILVER.
+// This file is safe to include in a web app; do not put private service-account keys here.
 window.NIVORA_FIREBASE_CONFIG = {
   apiKey: "AIzaSyDDlB5gISI6wKDkguaCxWG3zJ2hM7JnQAU",
   authDomain: "nivora-silver.firebaseapp.com",
