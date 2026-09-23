@@ -1,7 +1,6 @@
 import { initializeApp } from "https://www.gstatic.com/firebasejs/12.19.0/firebase-app.js";
 import { getAuth, onAuthStateChanged, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, updateProfile, sendPasswordResetEmail } from "https://www.gstatic.com/firebasejs/12.19.0/firebase-auth.js";
 import { getFirestore, collection, doc, getDoc, getDocs, addDoc, setDoc, updateDoc, deleteDoc, query, orderBy, limit, serverTimestamp } from "https://www.gstatic.com/firebasejs/12.19.0/firebase-firestore.js";
-import { getStorage, ref, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/12.19.0/firebase-storage.js";
 
 const config = window.NIVORA_FIREBASE_CONFIG || {};
 const configured = !!(config.apiKey && config.projectId && !String(config.apiKey).startsWith("YOUR_"));
@@ -16,7 +15,7 @@ if (!configured) {
     const app = initializeApp(config);
     const auth = getAuth(app);
     const db = getFirestore(app);
-    const storage = getStorage(app);
+    let storage = null;
     let resolveAuthReady;
     const authReady = new Promise(resolve => { resolveAuthReady = resolve; });
     let firstAuthState = true;
@@ -30,7 +29,7 @@ if (!configured) {
     });
 
     const api = {
-      enabled:true, app, auth, db, storage,
+      enabled:true, app, auth, db, get storage(){ return storage; },
       authReady,
       onAuthStateChanged,
       async register(name,email,password){
@@ -143,6 +142,11 @@ if (!configured) {
       async uploadProductImage(file,productId){
         const user = await api.currentUser();
         if(!user) throw new Error("يجب تسجيل الدخول");
+        if(!storage){
+          const mod = await import("https://www.gstatic.com/firebasejs/12.19.0/firebase-storage.js");
+          storage = mod.getStorage(app);
+        }
+        const {ref,uploadBytes,getDownloadURL}=await import("https://www.gstatic.com/firebasejs/12.19.0/firebase-storage.js");
         const r=ref(storage,`products/${productId}/${Date.now()}-${file.name}`);
         await uploadBytes(r,file,{contentType:file.type});
         return getDownloadURL(r);
