@@ -35,10 +35,29 @@ if (!configured) {
       const snap = await getDoc(doc(db,"users",auth.currentUser.uid));
       return snap.exists()?{id:snap.id,...snap.data()}:null;
     },
+    async getRole(){
+      if(!auth.currentUser) return null;
+      const snap = await getDoc(doc(db,"users",auth.currentUser.uid));
+      return snap.exists() ? (snap.data().role || "customer") : "customer";
+    },
     async isAdmin(){
-      if(!auth.currentUser) return false;
-      const token = await auth.currentUser.getIdTokenResult(true);
-      return token.claims.admin === true || token.claims.role === "admin" || auth.currentUser.email === "florintoursim@gmail.com";
+      const role = await this.getRole();
+      return role === "admin" || role === "manager";
+    },
+    async isEmployee(){ return (await this.getRole()) === "employee"; },
+    async saveOffer(offer){
+      if(!auth.currentUser || !(await this.isAdmin())) throw new Error("غير مصرح");
+      const id = offer.id || doc(collection(db,"offers")).id;
+      await setDoc(doc(db,"offers",id),{...offer,id,updatedAt:serverTimestamp(),createdAt:offer.createdAt||serverTimestamp()},{merge:true});
+      return id;
+    },
+    async listOffers(max=100){
+      const snap=await getDocs(query(collection(db,"offers"),orderBy("createdAt","desc"),limit(max)));
+      return snap.docs.map(d=>({id:d.id,...d.data()}));
+    },
+    async deleteOffer(id){
+      if(!auth.currentUser || !(await this.isAdmin())) throw new Error("غير مصرح");
+      await deleteDoc(doc(db,"offers",id));
     },
     async createOrder(order){
       if(!auth.currentUser) throw new Error("يجب تسجيل الدخول قبل إتمام الطلب");
