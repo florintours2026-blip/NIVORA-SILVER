@@ -3,8 +3,7 @@ service cloud.firestore {
   match /databases/{database}/documents {
     function signedIn() { return request.auth != null; }
     function ownAdminRecord() {
-      return signedIn() &&
-        exists(/databases/$(database)/documents/admins/$(request.auth.uid));
+      return signedIn() && exists(/databases/$(database)/documents/admins/$(request.auth.uid));
     }
     function adminRecord() {
       return get(/databases/$(database)/documents/admins/$(request.auth.uid)).data;
@@ -16,20 +15,28 @@ service cloud.firestore {
       return ownAdminRecord() && adminRecord().role in ['admin', 'manager', 'employee'];
     }
     function owner(uid) { return signedIn() && request.auth.uid == uid; }
+    function validMoney(v) { return v is number && v >= 0 && v <= 100000000; }
 
     match /admins/{uid} {
-      // A signed-in account can read only its own role document.
-      // Clients cannot create/change admin roles from the browser.
       allow read: if owner(uid);
+      // Admin role documents must be provisioned out-of-band by a trusted administrator.
       allow create, update, delete: if false;
     }
 
     match /users/{uid} {
       allow create: if owner(uid)
         && request.resource.data.uid == request.auth.uid
-        && request.resource.data.role == 'customer';
+        && request.resource.data.role == 'customer'
+        && request.resource.data.email == request.auth.token.email;
       allow read: if owner(uid) || isStaff();
-      allow update: if owner(uid) || isStaff();
+      // A customer may edit profile fields, but can never promote their own role or change uid/email.
+      allow update: if isStaff() || (
+        owner(uid)
+        && request.resource.data.uid == resource.data.uid
+        && request.resource.data.email == resource.data.email
+        && request.resource.data.role == resource.data.role
+        && resource.data.role == 'customer'
+      );
       allow delete: if isAdmin();
     }
 
@@ -39,7 +46,20 @@ service cloud.firestore {
     }
 
     match /orders/{id} {
-      allow create: if signedIn() && request.resource.data.customerId == request.auth.uid;
+      allow create: if signedIn()
+        && request.resource.data.customerId == request.auth.uid
+        && request.resource.data.currency == 'EGP'
+        && request.resource.data.status == 'جديد'
+        && request.resource.data.paymentStatus == 'pending'
+        && request.resource.data.paymentMethod in ['cod', 'bank', 'card']
+        && validMoney(request.resource.data.total)
+        && request.resource.data.items is list
+        && request.resource.data.items.size() > 0
+        && request.resource.data.items.size() <= 50
+        && request.resource.data.customer is map
+        && request.resource.data.customer.name is string
+        && request.resource.data.customer.phone is string
+        && request.resource.data.customer.address is string;
       allow read: if isStaff() || (signedIn() && resource.data.customerId == request.auth.uid);
       allow update, delete: if isAdmin();
     }
