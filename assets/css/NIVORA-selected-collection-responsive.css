@@ -1,88 +1,89 @@
 /* =========================================================
-   NIVORA SILVER
-   FIX: Selected Collection / editorial section
-   الملف مخصص فقط لإصلاح مشكلة المقاسات والترتيب والصور
+   NIVORA — Selected Collection / Editorial Layout Fix
+   الهدف:
+   - جعل القسم يعمل كـ CSS Grid فعلياً.
+   - منع صور المنتجات من التمدد الطولي خارج العمود.
+   - جعل الصورة الرئيسية أفقية وممتلئة داخل عمودها.
+   - جعل صور المجموعة المصغرة ممتلئة داخل أعمدتها.
+   - تحسين العرض على الهاتف بدون صور عمودية ضخمة.
    ========================================================= */
 
-/* الحاوية الرئيسية: 3 أعمدة ممتلئة أفقياً */
 .editorial {
   width: 100%;
   display: grid;
-  grid-template-columns: minmax(0, 1.55fr) minmax(260px, 0.85fr) minmax(300px, 0.9fr);
-  min-height: 430px;
-  height: 430px;
-  gap: 0;
+  grid-template-columns: minmax(0, 1.45fr) minmax(280px, .78fr) minmax(260px, .72fr);
+  min-height: 390px;
   align-items: stretch;
+  gap: 0;
   overflow: hidden;
   background: #070706;
 }
 
-/* الصورة الرئيسية: تملأ الكولم بالكامل وبنسبة أفقية */
 .editorial-image {
   width: 100%;
-  height: 100%;
   min-width: 0;
-  min-height: 0;
-  background-position: center center;
+  min-height: 390px;
+  height: 100%;
+  background-image: url('../media/nivora-watch.webp');
+  background-position: center;
   background-size: cover;
   background-repeat: no-repeat;
   position: relative;
   overflow: hidden;
 }
 
-.editorial-image:after {
-  content: "";
+.editorial-image::after {
+  content: '';
   position: absolute;
   inset: 0;
   background: linear-gradient(
     90deg,
-    rgba(0,0,0,.04),
-    rgba(0,0,0,.14) 55%,
-    rgba(0,0,0,.58)
+    rgba(0, 0, 0, .04),
+    rgba(0, 0, 0, .16) 55%,
+    rgba(0, 0, 0, .58)
   );
   pointer-events: none;
 }
 
-/* عمود النص */
 .editorial-copy {
+  width: 100%;
   min-width: 0;
-  height: 100%;
+  min-height: 390px;
   box-sizing: border-box;
-  padding: 42px 34px;
+  padding: 42px 38px;
   display: flex;
   flex-direction: column;
   justify-content: center;
+  align-items: flex-start;
+  background: #070706;
   overflow: hidden;
 }
 
 .editorial-copy h2 {
-  font-size: 36px;
-  line-height: 1.2;
+  font-size: 38px;
+  line-height: 1.15;
   margin: 8px 0 12px;
 }
 
 .editorial-copy p {
+  max-width: 420px;
   font-size: 13px;
   line-height: 1.9;
   margin: 0 0 20px;
 }
 
-.editorial-copy .btn-primary {
-  align-self: flex-start;
-}
-
-/* عمود المنتجات: يمتلئ بالكامل بدون صور طويلة */
 .editorial-mini {
+  width: 100%;
   min-width: 0;
-  min-height: 0;
-  height: 100%;
+  min-height: 390px;
   box-sizing: border-box;
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
   grid-template-rows: repeat(2, minmax(0, 1fr));
-  gap: 8px;
-  padding: 8px;
+  gap: 10px;
+  padding: 16px;
   overflow: hidden;
+  background: #070706;
 }
 
 .editorial-mini a {
@@ -91,9 +92,10 @@
   height: 100%;
   min-width: 0;
   min-height: 0;
-  overflow: hidden;
+  aspect-ratio: auto;
   background: #0b0b0a;
   position: relative;
+  overflow: hidden;
 }
 
 .editorial-mini img {
@@ -102,69 +104,68 @@
   height: 100%;
   min-width: 0;
   min-height: 0;
+  max-width: 100%;
+  max-height: 100%;
   object-fit: cover;
   object-position: center;
+  margin: 0;
+  padding: 0;
 }
 
-/* الشاشات المتوسطة */
+/* Tablet: keep the section horizontal and let the image/copy breathe. */
 @media (max-width: 1100px) {
   .editorial {
-    grid-template-columns: minmax(0, 1.25fr) minmax(0, .95fr);
-    grid-template-rows: 330px 150px;
-    height: 480px;
-    min-height: 480px;
+    grid-template-columns: minmax(0, 1.15fr) minmax(260px, .85fr);
+    min-height: 330px;
   }
 
   .editorial-image {
-    grid-column: 1;
-    grid-row: 1;
+    min-height: 330px;
+    height: 100%;
   }
 
   .editorial-copy {
-    grid-column: 2;
-    grid-row: 1;
-    padding: 28px 22px;
+    min-height: 330px;
+    padding: 30px 24px;
   }
 
   .editorial-copy h2 {
-    font-size: 30px;
+    font-size: 31px;
   }
 
   .editorial-mini {
     grid-column: 1 / -1;
-    grid-row: 2;
+    min-height: 0;
     grid-template-columns: repeat(4, minmax(0, 1fr));
-    grid-template-rows: 1fr;
-    padding: 8px;
+    grid-template-rows: minmax(130px, 1fr);
+    padding: 10px;
+  }
+
+  .editorial-mini a {
+    aspect-ratio: 16 / 10;
   }
 }
 
-/* الهاتف: الصورة أفقية وممتلئة قبل النص */
+/* Mobile: horizontal hero image first, then text, then compact product row. */
 @media (max-width: 760px) {
   .editorial {
-    width: 100%;
     display: grid;
     grid-template-columns: 1fr;
-    grid-template-rows: auto auto auto;
-    height: auto;
     min-height: 0;
+    width: 100%;
   }
 
   .editorial-image {
-    grid-column: 1;
-    grid-row: 1;
     width: 100%;
     height: auto;
-    aspect-ratio: 16 / 9;
     min-height: 0;
+    aspect-ratio: 16 / 9;
     max-height: none;
   }
 
   .editorial-copy {
-    grid-column: 1;
-    grid-row: 2;
     width: 100%;
-    height: auto;
+    min-height: 0;
     padding: 25px 18px;
   }
 
@@ -174,33 +175,28 @@
   }
 
   .editorial-copy p {
-    font-size: 11px;
+    max-width: none;
+    font-size: 10px;
     line-height: 1.8;
     margin-bottom: 17px;
   }
 
   .editorial-mini {
-    grid-column: 1;
-    grid-row: 3;
     width: 100%;
-    height: auto;
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    grid-template-rows: repeat(2, minmax(0, 1fr));
+    min-height: 0;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    grid-template-rows: auto;
     gap: 7px;
-    padding: 8px;
+    padding: 9px;
   }
 
   .editorial-mini a {
-    aspect-ratio: 1 / 1;
+    width: 100%;
     height: auto;
-  }
-
-  .editorial-mini img {
-    aspect-ratio: 1 / 1;
+    aspect-ratio: 16 / 11;
   }
 }
 
-/* الهواتف الصغيرة */
 @media (max-width: 460px) {
   .editorial-image {
     aspect-ratio: 16 / 9;
@@ -215,7 +211,12 @@
   }
 
   .editorial-mini {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
     gap: 6px;
     padding: 7px;
+  }
+
+  .editorial-mini a {
+    aspect-ratio: 16 / 10;
   }
 }
