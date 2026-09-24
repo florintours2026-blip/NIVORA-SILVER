@@ -1,19 +1,19 @@
-NIVORA - Admin login fix (Firestore admins collection)
+NIVORA SILVER - PATCH
 
-Replace ONLY these files:
-- assets/js/firebase-init.js
-- assets/js/site.js
-- firestore.rules
-- admin-login.html
-- admin.html
+هذا الملف يحتوي فقط على الملف المسؤول عن مشكلة قسم:
+"مجموعة مختارة لك"
 
-The admin account is read from:
-admins/{Firebase Auth UID}
-with role: admin or manager.
+الملف:
+assets/css/NIVORA-selected-collection-responsive.css
 
-For the account UID supplied by the owner:
-admins/3AIDO0nqgDMT99yTXsRWMOFHHYD3
-role: admin
+طريقة الاستخدام:
+1. فك الضغط.
+2. استبدل الملف الموجود في نفس المسار داخل مشروع NIVORA.
+3. لا حاجة لاستبدال أي ملف آخر.
 
-After replacing the files, publish/deploy the site and publish the Firestore rules.
-No Cloud Functions, custom claims, or paid Firebase plan are required.
+الإصلاحات:
+- جعل القسم Grid فعلياً بثلاثة أعمدة على الشاشات الكبيرة.
+- ملء الكولم بالكامل بدون تمدد رأسي غير طبيعي.
+- جعل الصورة الرئيسية أفقية وممتلئة داخل الكولم.
+- ترتيب الصور المصغرة داخل مساحة الكولم بالكامل.
+- تحسين القياسات على الهاتف والشاشات المتوسطة.
