@@ -1,13 +1,221 @@
-/* Drop-in override for the "مجموعة مختارة لك" / editorial section. */
-.editorial{grid-template-columns:minmax(0,1.45fr) minmax(280px,.78fr) minmax(260px,.72fr);min-height:390px;align-items:stretch;gap:0;background:#070706}
-.editorial-image{min-height:390px;background-position:center;background-size:cover;position:relative}
-.editorial-image:after{content:"";position:absolute;inset:0;background:linear-gradient(90deg,rgba(0,0,0,.05),rgba(0,0,0,.18) 55%,rgba(0,0,0,.62))}
-.editorial-copy{padding:42px 38px;justify-content:center;min-width:0}
-.editorial-copy h2{font-size:38px;line-height:1.15}
-.editorial-copy p{font-size:13px;line-height:1.9}
-.editorial-mini{grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;padding:16px}
-.editorial-mini a{aspect-ratio:1/1;min-width:0;background:#0b0b0a;position:relative}
-.editorial-mini img{width:100%;height:100%;min-height:0;object-fit:cover;object-position:center;display:block}
-@media(max-width:1100px){.editorial{grid-template-columns:1.15fr .85fr;min-height:330px}.editorial-image{min-height:330px}.editorial-copy{padding:30px 24px}.editorial-copy h2{font-size:31px}.editorial-mini{display:grid;grid-column:1/-1;grid-template-columns:repeat(4,1fr);padding:10px}.editorial-mini a{aspect-ratio:1.25/1}}
-@media(max-width:760px){.editorial{display:grid;grid-template-columns:1fr;min-height:0}.editorial-image{height:56vw;min-height:190px;max-height:290px}.editorial-copy{padding:25px 18px}.editorial-copy h2{font-size:27px;margin:5px 0 10px}.editorial-copy p{font-size:10px;line-height:1.8;margin-bottom:17px}.editorial-mini{grid-template-columns:repeat(2,minmax(0,1fr));gap:7px;padding:9px}.editorial-mini a{aspect-ratio:1/1}}
-@media(max-width:460px){.editorial-image{height:58vw;min-height:175px}.editorial-copy{padding:21px 13px}.editorial-copy h2{font-size:23px}.editorial-mini{gap:6px;padding:7px}}
+/* =========================================================
+   NIVORA SILVER
+   FIX: Selected Collection / editorial section
+   الملف مخصص فقط لإصلاح مشكلة المقاسات والترتيب والصور
+   ========================================================= */
+
+/* الحاوية الرئيسية: 3 أعمدة ممتلئة أفقياً */
+.editorial {
+  width: 100%;
+  display: grid;
+  grid-template-columns: minmax(0, 1.55fr) minmax(260px, 0.85fr) minmax(300px, 0.9fr);
+  min-height: 430px;
+  height: 430px;
+  gap: 0;
+  align-items: stretch;
+  overflow: hidden;
+  background: #070706;
+}
+
+/* الصورة الرئيسية: تملأ الكولم بالكامل وبنسبة أفقية */
+.editorial-image {
+  width: 100%;
+  height: 100%;
+  min-width: 0;
+  min-height: 0;
+  background-position: center center;
+  background-size: cover;
+  background-repeat: no-repeat;
+  position: relative;
+  overflow: hidden;
+}
+
+.editorial-image:after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    90deg,
+    rgba(0,0,0,.04),
+    rgba(0,0,0,.14) 55%,
+    rgba(0,0,0,.58)
+  );
+  pointer-events: none;
+}
+
+/* عمود النص */
+.editorial-copy {
+  min-width: 0;
+  height: 100%;
+  box-sizing: border-box;
+  padding: 42px 34px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  overflow: hidden;
+}
+
+.editorial-copy h2 {
+  font-size: 36px;
+  line-height: 1.2;
+  margin: 8px 0 12px;
+}
+
+.editorial-copy p {
+  font-size: 13px;
+  line-height: 1.9;
+  margin: 0 0 20px;
+}
+
+.editorial-copy .btn-primary {
+  align-self: flex-start;
+}
+
+/* عمود المنتجات: يمتلئ بالكامل بدون صور طويلة */
+.editorial-mini {
+  min-width: 0;
+  min-height: 0;
+  height: 100%;
+  box-sizing: border-box;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  grid-template-rows: repeat(2, minmax(0, 1fr));
+  gap: 8px;
+  padding: 8px;
+  overflow: hidden;
+}
+
+.editorial-mini a {
+  display: block;
+  width: 100%;
+  height: 100%;
+  min-width: 0;
+  min-height: 0;
+  overflow: hidden;
+  background: #0b0b0a;
+  position: relative;
+}
+
+.editorial-mini img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  min-width: 0;
+  min-height: 0;
+  object-fit: cover;
+  object-position: center;
+}
+
+/* الشاشات المتوسطة */
+@media (max-width: 1100px) {
+  .editorial {
+    grid-template-columns: minmax(0, 1.25fr) minmax(0, .95fr);
+    grid-template-rows: 330px 150px;
+    height: 480px;
+    min-height: 480px;
+  }
+
+  .editorial-image {
+    grid-column: 1;
+    grid-row: 1;
+  }
+
+  .editorial-copy {
+    grid-column: 2;
+    grid-row: 1;
+    padding: 28px 22px;
+  }
+
+  .editorial-copy h2 {
+    font-size: 30px;
+  }
+
+  .editorial-mini {
+    grid-column: 1 / -1;
+    grid-row: 2;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    grid-template-rows: 1fr;
+    padding: 8px;
+  }
+}
+
+/* الهاتف: الصورة أفقية وممتلئة قبل النص */
+@media (max-width: 760px) {
+  .editorial {
+    width: 100%;
+    display: grid;
+    grid-template-columns: 1fr;
+    grid-template-rows: auto auto auto;
+    height: auto;
+    min-height: 0;
+  }
+
+  .editorial-image {
+    grid-column: 1;
+    grid-row: 1;
+    width: 100%;
+    height: auto;
+    aspect-ratio: 16 / 9;
+    min-height: 0;
+    max-height: none;
+  }
+
+  .editorial-copy {
+    grid-column: 1;
+    grid-row: 2;
+    width: 100%;
+    height: auto;
+    padding: 25px 18px;
+  }
+
+  .editorial-copy h2 {
+    font-size: 27px;
+    margin: 5px 0 10px;
+  }
+
+  .editorial-copy p {
+    font-size: 11px;
+    line-height: 1.8;
+    margin-bottom: 17px;
+  }
+
+  .editorial-mini {
+    grid-column: 1;
+    grid-row: 3;
+    width: 100%;
+    height: auto;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    grid-template-rows: repeat(2, minmax(0, 1fr));
+    gap: 7px;
+    padding: 8px;
+  }
+
+  .editorial-mini a {
+    aspect-ratio: 1 / 1;
+    height: auto;
+  }
+
+  .editorial-mini img {
+    aspect-ratio: 1 / 1;
+  }
+}
+
+/* الهواتف الصغيرة */
+@media (max-width: 460px) {
+  .editorial-image {
+    aspect-ratio: 16 / 9;
+  }
+
+  .editorial-copy {
+    padding: 21px 13px;
+  }
+
+  .editorial-copy h2 {
+    font-size: 23px;
+  }
+
+  .editorial-mini {
+    gap: 6px;
+    padding: 7px;
+  }
+}
