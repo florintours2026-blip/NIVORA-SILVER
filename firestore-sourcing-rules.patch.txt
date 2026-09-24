@@ -1,0 +1,28 @@
+أضف هذه القواعد داخل firestore.rules قبل القوس الأخير:
+
+match /productRequests/{id} {
+  allow create: if signedIn()
+    && request.resource.data.customerId == request.auth.uid
+    && request.resource.data.status == 'requested'
+    && request.resource.data.quantity is int
+    && request.resource.data.quantity > 0
+    && request.resource.data.quantity <= 50;
+  allow read: if isStaff() || (signedIn() && resource.data.customerId == request.auth.uid);
+  allow update: if isAdmin();
+  allow delete: if isAdmin();
+}
+
+شكل المستند المقترح:
+{
+  customerId: uid,
+  customer: { name, phone },
+  productName: 'اسم المنتج',
+  url: 'https://...',
+  image: 'https://...',
+  source: 'Amazon | Noon | Alibaba | AliExpress',
+  quantity: 1,
+  status: 'requested',
+  notes: '',
+  createdAt: serverTimestamp(),
+  updatedAt: serverTimestamp()
+}

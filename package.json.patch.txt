@@ -1,0 +1,4 @@
+داخل dependencies في package.json الحالي أضف:
+"firebase-admin": "^13.5.0"
+
+لا تحذف بقية dependencies الموجودة.
