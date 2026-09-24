@@ -146,9 +146,15 @@ if (!configured) {
           const mod = await import("https://www.gstatic.com/firebasejs/12.19.0/firebase-storage.js");
           storage = mod.getStorage(app);
         }
+        if(!(file instanceof File)) throw new Error("ملف غير صالح");
+        if(!/^image\/(jpeg|png|webp|avif)$/.test(file.type)) throw new Error("يسمح فقط بصور JPG أو PNG أو WEBP أو AVIF");
+        if(file.size > 5 * 1024 * 1024) throw new Error("حجم الصورة يتجاوز 5MB");
         const {ref,uploadBytes,getDownloadURL}=await import("https://www.gstatic.com/firebasejs/12.19.0/firebase-storage.js");
-        const r=ref(storage,`products/${productId}/${Date.now()}-${file.name}`);
-        await uploadBytes(r,file,{contentType:file.type});
+        const safeProductId=String(productId).replace(/[^A-Za-z0-9_-]/g,"").slice(0,80);
+        const ext=(file.type.split("/")[1]||"bin").replace(/[^A-Za-z0-9]/g,"");
+        const name=`${Date.now()}-${crypto.randomUUID?crypto.randomUUID():Math.random().toString(36).slice(2)}`;
+        const r=ref(storage,`products/${safeProductId}/${name}.${ext}`);
+        await uploadBytes(r,file,{contentType:file.type,cacheControl:"public,max-age=31536000,immutable"});
         return getDownloadURL(r);
       }
     };
