@@ -1,14 +1,20 @@
 services:
   - type: web
-    name: nivora-silver
+    name: nivora-import-api
     runtime: node
-    buildCommand: npm install
+    buildCommand: npm install --omit=dev
     startCommand: npm start
     healthCheckPath: /api/health
     envVars:
       - key: NODE_ENV
         value: production
       - key: CORS_ORIGIN
-        value: "*"
-      - key: JWT_SECRET
-        generateValue: true
+        value: https://YOUR-GITHUB-USERNAME.github.io
+      - key: FIREBASE_WEB_API_KEY
+        sync: false
+      - key: IMPORT_ADMIN_EMAILS
+        sync: false
+      - key: IMPORT_TIMEOUT_MS
+        value: 15000
+      - key: MAX_IMPORT_REQUESTS_PER_MINUTE
+        value: 10

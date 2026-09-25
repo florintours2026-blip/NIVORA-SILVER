@@ -1,21 +1,21 @@
-# Security Policy
+# NIVORA SILVER — Security Notes
 
-## Supported Versions
+## حماية النسخة الحالية
 
-Use this section to tell people about which versions of your project are
-currently being supported with security updates.
+- Firebase Security Rules هي خط الدفاع الأساسي عن الكتالوج والطلبات وبيانات العملاء.
+- بيانات تكلفة المورد منفصلة في `productPrivate` ولا تُقرأ للزوار.
+- استيراد الروابط لا يقبل إلا Amazon / Noon / Alibaba / AliExpress.
+- Backend importer يتحقق من Firebase ID token ويقصر الاستيراد على البريد الموجود في `IMPORT_ADMIN_EMAILS`.
+- حماية SSRF تمنع المضيفات المحلية والخاصة وتتحقق من إعادة التوجيه.
+- مهلة طلبات الاستيراد محدودة، وحجم HTML محدود، وعدد الاستيرادات محدود لكل مدير في الذاكرة.
+- رفع صور المنتجات محصور بمديري المتجر وبحد 5MB وبأنواع الصور فقط.
+- مفاتيح Service Account لا توضع في الواجهة.
+- تتبع الاهتمامات لا يبدأ إلا بعد موافقة المستخدم.
 
-| Version | Supported          |
-| ------- | ------------------ |
-| 5.1.x   | :white_check_mark: |
-| 5.0.x   | :x:                |
-| 4.0.x   | :white_check_mark: |
-| < 4.0   | :x:                |
+## ما لا يجب ادعاؤه
 
-## Reporting a Vulnerability
+لا يوجد نظام برمجي يمكن ضمان خلوه من جميع الثغرات. قبل تخزين بيانات دفع حساسة أو تنفيذ شراء آلي لدى الموردين، يجب إجراء اختبار أمني مستقل ومراجعة صلاحيات Firebase والاستضافة.
 
-Use this section to tell people how to report a vulnerability.
+## الاستيراد من المتاجر الخارجية
 
-Tell them where to go, how often they can expect to get an update on a
-reported vulnerability, what to expect if the vulnerability is accepted or
-declined, etc.
+المستورد يقرأ البيانات العامة فقط. لا يحاول تجاوز CAPTCHA أو تسجيل الدخول أو الحماية المضادة للروبوتات. عند فشل الوصول يجب استخدام API أو Feed أو Affiliate/Product API مصرح به من المصدر.

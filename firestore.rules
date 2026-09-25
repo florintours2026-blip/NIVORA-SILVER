@@ -41,8 +41,12 @@ service cloud.firestore {
     }
 
     match /products/{id} {
-      allow read: if true;
+      allow read: if resource.data.status == 'active' || isStaff();
       allow create, update, delete: if isAdmin();
+    }
+
+    match /productPrivate/{id} {
+      allow read, write, delete: if isAdmin();
     }
 
     match /orders/{id} {
@@ -79,6 +83,24 @@ service cloud.firestore {
     match /settings/{id} {
       allow read: if true;
       allow write: if isAdmin();
+    }
+
+
+    match /productRequests/{id} {
+      allow create: if signedIn()
+        && request.resource.data.customerId == request.auth.uid
+        && request.resource.data.status == 'new'
+        && request.resource.data.productId is string
+        && request.resource.data.productName is string;
+      allow read: if isStaff() || (signedIn() && resource.data.customerId == request.auth.uid);
+      allow update: if isStaff();
+      allow delete: if isAdmin();
+    }
+
+    match /customerEvents/{id} {
+      allow create: if signedIn() && request.resource.data.customerId == request.auth.uid;
+      allow read: if isStaff();
+      allow update, delete: if isAdmin();
     }
 
     match /offers/{id} {
