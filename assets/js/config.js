@@ -1,1 +1,10 @@
-window.NIVORA_CONFIG={apiBaseUrl:"",currency:"EGP",locale:"ar-EG",enableDemoMode:false,functionsBaseUrl:"https://YOUR_REGION-YOUR_PROJECT_ID.cloudfunctions.net"};
+window.NIVORA_CONFIG = {
+  apiBaseUrl: "/api",
+  STORE_CURRENCY: "EGP",
+  STORE_LOCALE: "ar-EG",
+  ADMIN_EMAIL: "",
+  DEMO_MODE: false,
+  enableDemoMode: false,
+  enableTracking: true,
+  googleAnalyticsId: ""
+};

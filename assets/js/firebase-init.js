@@ -1,6 +1,6 @@
 import { initializeApp } from "https://www.gstatic.com/firebasejs/12.19.0/firebase-app.js";
 import { getAuth, onAuthStateChanged, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, updateProfile, sendPasswordResetEmail } from "https://www.gstatic.com/firebasejs/12.19.0/firebase-auth.js";
-import { getFirestore, collection, doc, getDoc, getDocs, addDoc, setDoc, updateDoc, deleteDoc, query, orderBy, limit, serverTimestamp } from "https://www.gstatic.com/firebasejs/12.19.0/firebase-firestore.js";
+import { getFirestore, collection, doc, getDoc, getDocs, addDoc, setDoc, updateDoc, deleteDoc, query, where, orderBy, limit, serverTimestamp } from "https://www.gstatic.com/firebasejs/12.19.0/firebase-firestore.js";
 
 const config = window.NIVORA_FIREBASE_CONFIG || {};
 const configured = !!(config.apiKey && config.projectId && !String(config.apiKey).startsWith("YOUR_"));
@@ -98,6 +98,13 @@ if (!configured) {
         } catch (e) { console.warn("Transaction record skipped",e); }
         return orderRef.id;
       },
+      async updateOrder(id,patch){ await updateDoc(doc(db,"orders",id),{...patch,updatedAt:serverTimestamp()}); },
+      async listMyOrders(max=100){
+        const user=await api.currentUser(); if(!user) return [];
+        const snap=await getDocs(query(collection(db,"orders"),where("customerId","==",user.uid),limit(max)));
+        return snap.docs.map(d=>({id:d.id,...d.data()}));
+      },
+      async getOrder(id){ const snap=await getDoc(doc(db,"orders",id)); return snap.exists()?{id:snap.id,...snap.data()}:null; },
       async listOrders(max=200){
         const snap = await getDocs(query(collection(db,"orders"),orderBy("createdAt","desc"),limit(max)));
         return snap.docs.map(d=>({id:d.id,...d.data()}));
@@ -120,12 +127,58 @@ if (!configured) {
       },
       async listProducts(max=500){
         const snap=await getDocs(query(collection(db,"products"),limit(max)));
-        return snap.docs.map(d=>({id:d.id,...d.data()}));
+        const base=snap.docs.map(d=>({id:d.id,...d.data()}));
+        const admin=await api.isAdmin();
+        if(!admin) return base;
+        const merged=[];
+        for(const p of base){ try{const ps=await getDoc(doc(db,"productPrivate",p.id)); merged.push(ps.exists()?{...p,...ps.data()}:p)}catch{merged.push(p)} }
+        return merged;
       },
       async saveProduct(product){
         const id=product.id || doc(collection(db,"products")).id;
-        await setDoc(doc(db,"products",id),{...product,id,updatedAt:serverTimestamp()},{merge:true});
+        const {costPrice,supplierCost,externalProductId,...publicProduct}=product;
+        await setDoc(doc(db,"products",id),{...publicProduct,id,updatedAt:serverTimestamp()},{merge:true});
+        await setDoc(doc(db,"productPrivate",id),{costPrice:Number(costPrice||supplierCost||0),externalProductId:String(externalProductId||""),updatedAt:serverTimestamp()},{merge:true});
         return id;
+      },
+      async deleteProduct(id){
+        if(!id) throw new Error("معرّف المنتج مطلوب");
+        await deleteDoc(doc(db,"products",id));
+        try{await deleteDoc(doc(db,"productPrivate",id))}catch{}
+      },
+      async createProductRequest(request){
+        const user = await api.currentUser();
+        if(!user) throw new Error("يجب تسجيل الدخول لإرسال طلب توفير المنتج");
+        const ref = doc(collection(db,"productRequests"));
+        await setDoc(ref,{...request,id:ref.id,customerId:user.uid,customerEmail:user.email || "",status:"new",createdAt:serverTimestamp(),updatedAt:serverTimestamp()});
+        return ref.id;
+      },
+      async listCustomers(max=500){
+        const snap=await getDocs(query(collection(db,"users"),limit(max)));
+        return snap.docs.map(d=>({id:d.id,...d.data()})).filter(x=>x.role==="customer");
+      },
+      async listCustomerEvents(max=1000){
+        const snap=await getDocs(query(collection(db,"customerEvents"),orderBy("createdAt","desc"),limit(max)));
+        return snap.docs.map(d=>({id:d.id,...d.data()}));
+      },
+      async listProductRequests(max=300){
+        const snap = await getDocs(query(collection(db,"productRequests"),orderBy("createdAt","desc"),limit(max)));
+        return snap.docs.map(d=>({id:d.id,...d.data()}));
+      },
+      async updateProductRequest(id,patch){
+        await updateDoc(doc(db,"productRequests",id),{...patch,updatedAt:serverTimestamp()});
+      },
+      async trackEvent(event){
+        if(!window.NIVORA_CONFIG?.enableTracking || localStorage.getItem("nivora_tracking_consent") !== "granted") return;
+        try{ window.NivoraAnalytics?.event(event.type || "nivora_event", {product_id:event.productId || undefined, category:event.metadata?.category || undefined}); }catch{}
+        const user=await api.currentUser();
+        if(!user) {
+          const local=JSON.parse(localStorage.getItem("nivora_behavior_events")||"[]");
+          local.push({...event,at:new Date().toISOString()});
+          localStorage.setItem("nivora_behavior_events",JSON.stringify(local.slice(-100)));
+          return;
+        }
+        await addDoc(collection(db,"customerEvents"),{...event,customerId:user.uid,createdAt:serverTimestamp()});
       },
       async listOffers(max=100){
         const snap=await getDocs(query(collection(db,"offers"),orderBy("createdAt","desc"),limit(max)));
