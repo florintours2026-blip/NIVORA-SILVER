@@ -29,8 +29,14 @@ service cloud.firestore {
         && request.resource.data.role == 'customer'
         && request.resource.data.email == request.auth.token.email;
       allow read: if owner(uid) || isStaff();
-      // A customer may edit profile fields, but can never promote their own role or change uid/email.
-      allow update: if isStaff() || (
+      // Admins/managers may manage user records. Employees may read staff-visible
+      // customer data but cannot change uid, email, or role.
+      allow update: if isAdmin() || (
+        isStaff()
+        && request.resource.data.uid == resource.data.uid
+        && request.resource.data.email == resource.data.email
+        && request.resource.data.role == resource.data.role
+      ) || (
         owner(uid)
         && request.resource.data.uid == resource.data.uid
         && request.resource.data.email == resource.data.email
@@ -104,7 +110,7 @@ service cloud.firestore {
     }
 
     match /offers/{id} {
-      allow read: if true;
+      allow read: if isStaff() || resource.data.active == true;
       allow create, update, delete: if isAdmin();
     }
   }
