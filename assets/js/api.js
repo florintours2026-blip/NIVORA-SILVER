@@ -8,7 +8,15 @@ window.NivoraAPI = {
       const user = firebase?.auth?.currentUser;
       if (user?.getIdToken) headers.Authorization = `Bearer ${await user.getIdToken(false)}`;
     } catch (e) { console.warn("NIVORA token attach failed", e); }
-    const response = await fetch(base.replace(/\/$/, "") + path, { ...options, headers });
+    let response;
+    try {
+      response = await fetch(base.replace(/\/$/, "") + path, { ...options, headers });
+    } catch (e) {
+      const error = new Error("تعذر الاتصال بخادم استيراد المنتجات. تأكد من نشر Backend وضبط apiBaseUrl في assets/js/config.js.");
+      error.code = "API_CONNECTION_FAILED";
+      error.cause = e;
+      throw error;
+    }
     const body = response.status === 204 ? null : await response.json().catch(() => null);
     if (!response.ok) {
       const error = new Error(body?.error || `API error: ${response.status}`);
