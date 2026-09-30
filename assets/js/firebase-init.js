@@ -126,12 +126,22 @@ if (!configured) {
         return snap.docs.map(d=>({id:d.id,...d.data()}));
       },
       async listProducts(max=500){
-        const snap=await getDocs(query(collection(db,"products"),limit(max)));
-        const base=snap.docs.map(d=>({id:d.id,...d.data()}));
         const admin=await api.isAdmin();
+        const q = admin
+          ? query(collection(db,"products"),limit(max))
+          : query(collection(db,"products"),where("status","==","active"),limit(max));
+        const snap=await getDocs(q);
+        const base=snap.docs.map(d=>({id:d.id,...d.data()}));
         if(!admin) return base;
         const merged=[];
-        for(const p of base){ try{const ps=await getDoc(doc(db,"productPrivate",p.id)); merged.push(ps.exists()?{...p,...ps.data()}:p)}catch{merged.push(p)} }
+        for(const p of base){
+          try{
+            const ps=await getDoc(doc(db,"productPrivate",p.id));
+            merged.push(ps.exists()?{...p,...ps.data()}:p);
+          }catch{
+            merged.push(p);
+          }
+        }
         return merged;
       },
       async saveProduct(product){
@@ -181,12 +191,22 @@ if (!configured) {
         await addDoc(collection(db,"customerEvents"),{...event,customerId:user.uid,createdAt:serverTimestamp()});
       },
       async listOffers(max=100){
-        const snap=await getDocs(query(collection(db,"offers"),orderBy("createdAt","desc"),limit(max)));
+        const admin=await api.isAdmin();
+        const q=admin
+          ? query(collection(db,"offers"),orderBy("createdAt","desc"),limit(max))
+          : query(collection(db,"offers"),where("active","==",true),orderBy("createdAt","desc"),limit(max));
+        const snap=await getDocs(q);
         return snap.docs.map(d=>({id:d.id,...d.data()}));
       },
       async saveOffer(offer){
         const id=offer.id || doc(collection(db,"offers")).id;
-        await setDoc(doc(db,"offers",id),{...offer,id,updatedAt:serverTimestamp(),createdAt:offer.createdAt||serverTimestamp()},{merge:true});
+        await setDoc(doc(db,"offers",id),{
+          ...offer,
+          id,
+          active: offer.active !== false,
+          updatedAt:serverTimestamp(),
+          createdAt:offer.createdAt||serverTimestamp()
+        },{merge:true});
         return id;
       },
       async deleteOffer(id){

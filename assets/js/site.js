@@ -64,6 +64,105 @@ function indexGate(){
   document.body.innerHTML=`<div class="nv-splash"><div class="nv-splash-inner"><img src="assets/logo/logo-transparent.webp" alt="NIVORA SILVER" class="nv-splash-logo"><div class="eyebrow">SILVER • LUXURY STORE</div><h1>فخامة تبدأ من التفاصيل</h1><p>أناقة مختارة بعناية، وتجربة صنعت لتبقى.</p><div class="nv-loader"><i></i></div></div></div>`;
   setTimeout(()=>home(),180);
 }
+function showMsg(message){
+  const el=$("#msg");
+  if(!el){toast(message);return;}
+  el.textContent=String(message||"");
+  el.classList.add("show");
+}
+function loginHub(){
+  const params=new URLSearchParams(location.search);
+  const next=params.get("next");
+  let mode="customer";
+  shell(`<section class="page container auth-page"><div class="auth-intro"><div class="eyebrow">NIVORA ACCOUNT</div><h1>تسجيل الدخول</h1><p class="muted">اختر نوع الحساب ثم أدخل بياناتك للوصول إلى حسابك.</p></div><div class="auth-roles"><button class="role-card active" type="button" data-role="customer"><strong>العملاء</strong><span>التسوق، الطلبات، المفضلة وتتبع الطلبات.</span></button><button class="role-card" type="button" data-role="employee"><strong>الموظفون</strong><span>الوصول إلى أدوات العمل حسب الصلاحية.</span></button><button class="role-card" type="button" data-role="admin"><strong>الإدارة</strong><span>إدارة المتجر والمنتجات والطلبات.</span></button></div><div class="auth-form-wrap"><form class="form" id="login-form"><div class="eyebrow" id="login-eyebrow">CUSTOMER ACCESS</div><h2 id="login-title">تسجيل دخول العميل</h2><div id="msg" class="message"></div><div class="form-row"><label>البريد الإلكتروني</label><input autocomplete="email" class="field" id="login-email" type="email" required></div><div class="form-row"><label>كلمة المرور</label><input autocomplete="current-password" class="field" id="login-pass" type="password" required></div><button class="btn-primary" id="login-submit" style="width:100%">تسجيل الدخول</button><div class="form-links"><a href="forgot-password.html">نسيت كلمة المرور؟</a><a href="register.html">إنشاء حساب جديد</a></div></form></div></section>`);
+
+  const labels={
+    customer:{eyebrow:"CUSTOMER ACCESS",title:"تسجيل دخول العميل"},
+    employee:{eyebrow:"EMPLOYEE ACCESS",title:"تسجيل دخول الموظف"},
+    admin:{eyebrow:"ADMIN ACCESS",title:"تسجيل دخول الإدارة"}
+  };
+  const applyMode=()=>{
+    $$(".role-card").forEach(card=>card.classList.toggle("active",card.dataset.role===mode));
+    $("#login-eyebrow").textContent=labels[mode].eyebrow;
+    $("#login-title").textContent=labels[mode].title;
+  };
+  $$("[data-role]").forEach(card=>card.onclick=()=>{mode=card.dataset.role;applyMode()});
+  $("#login-form").onsubmit=async e=>{
+    e.preventDefault();
+    const btn=$("#login-submit");
+    btn.disabled=true;btn.textContent="جارٍ تسجيل الدخول...";
+    try{
+      if(!window.NivoraFirebase?.enabled)throw new Error("Firebase غير مهيأ");
+      const user=await window.NivoraFirebase.login($("#login-email").value.trim(),$("#login-pass").value);
+      const role=await window.NivoraFirebase.getRole();
+      const allowed=mode==="customer"
+        ? role==="customer"
+        : mode==="employee"
+          ? ["employee","manager","admin"].includes(role)
+          : ["manager","admin"].includes(role);
+      if(!allowed){
+        await window.NivoraFirebase.logout();
+        throw new Error(mode==="customer"?"هذا الحساب ليس حساب عميل.":"هذا الحساب لا يملك صلاحية الوصول إلى هذا القسم.");
+      }
+      const profile=await window.NivoraFirebase.getCurrentUserProfile();
+      const userRecord={uid:user.uid,name:user.displayName||profile?.name||user.email?.split("@")[0]||"",email:user.email,role};
+      set("nivora_user",userRecord);
+      if(["admin","manager","employee"].includes(role))set("nivora_admin",userRecord);
+      const target=next||(["admin","manager","employee"].includes(role)?"admin.html":"account.html");
+      location.href=target;
+    }catch(err){
+      showMsg(err.code==="auth/invalid-credential"||err.code==="auth/wrong-password"?"البريد الإلكتروني أو كلمة المرور غير صحيحة":err.message||"تعذر تسجيل الدخول");
+      btn.disabled=false;btn.textContent="تسجيل الدخول";
+    }
+  };
+  applyMode();
+}
+
+function login(targetMode="admin"){
+  let mode=targetMode==="admin"?"admin":"employee";
+  shell(`<section class="page container auth-page"><div class="auth-intro"><div class="eyebrow">NIVORA ADMIN</div><h1>دخول الإدارة</h1><p class="muted">هذه الصفحة مخصصة للحسابات التي تملك صلاحية إدارية.</p></div><div class="auth-form-wrap"><form class="form" id="login-form"><div class="eyebrow">ADMIN ACCESS</div><h2>تسجيل دخول الإدارة</h2><div id="msg" class="message"></div><div class="form-row"><label>البريد الإلكتروني</label><input autocomplete="email" class="field" id="login-email" type="email" required></div><div class="form-row"><label>كلمة المرور</label><input autocomplete="current-password" class="field" id="login-pass" type="password" required></div><button class="btn-primary" id="login-submit" style="width:100%">تسجيل الدخول</button><div class="form-links"><a href="login.html">دخول العملاء</a><a href="forgot-password.html">نسيت كلمة المرور؟</a></div></form></div></section>`);
+  $("#login-form").onsubmit=async e=>{
+    e.preventDefault();
+    const btn=$("#login-submit");btn.disabled=true;btn.textContent="جارٍ تسجيل الدخول...";
+    try{
+      if(!window.NivoraFirebase?.enabled)throw new Error("Firebase غير مهيأ");
+      const user=await window.NivoraFirebase.login($("#login-email").value.trim(),$("#login-pass").value);
+      const role=await window.NivoraFirebase.getRole();
+      if(!["admin","manager","employee"].includes(role)){
+        await window.NivoraFirebase.logout();
+        throw new Error("هذا الحساب لا يملك صلاحية إدارية.");
+      }
+      if(mode==="admin"&&!["admin","manager"].includes(role)){
+        await window.NivoraFirebase.logout();
+        throw new Error("هذا الحساب لا يملك صلاحية الإدارة.");
+      }
+      const profile=await window.NivoraFirebase.getCurrentUserProfile();
+      const record={uid:user.uid,name:user.displayName||profile?.name||user.email?.split("@")[0]||"",email:user.email,role};
+      set("nivora_user",record);set("nivora_admin",record);location.href="admin.html";
+    }catch(err){
+      showMsg(err.code==="auth/invalid-credential"||err.code==="auth/wrong-password"?"البريد الإلكتروني أو كلمة المرور غير صحيحة":err.message||"تعذر تسجيل الدخول");
+      btn.disabled=false;btn.textContent="تسجيل الدخول";
+    }
+  };
+}
+
+function forgotPassword(){
+  shell(`<section class="page container auth-page"><div class="auth-form-wrap"><form class="form" id="forgot-form"><div class="eyebrow">NIVORA ACCOUNT</div><h2>استعادة كلمة المرور</h2><p class="muted">أدخل بريدك الإلكتروني وسنرسل لك رابط إعادة تعيين كلمة المرور.</p><div id="msg" class="message"></div><div class="form-row"><label>البريد الإلكتروني</label><input autocomplete="email" class="field" id="forgot-email" type="email" required></div><button class="btn-primary" id="forgot-submit" style="width:100%">إرسال رابط الاستعادة</button><div class="form-links"><a href="login.html">العودة لتسجيل الدخول</a></div></form></div></section>`);
+  $("#forgot-form").onsubmit=async e=>{
+    e.preventDefault();
+    const btn=$("#forgot-submit");btn.disabled=true;btn.textContent="جارٍ الإرسال...";
+    try{
+      if(!window.NivoraFirebase?.enabled)throw new Error("Firebase غير مهيأ");
+      await window.NivoraFirebase.resetPassword($("#forgot-email").value.trim());
+      showMsg("تم إرسال رابط إعادة تعيين كلمة المرور إلى بريدك الإلكتروني.","show");
+      btn.textContent="تم الإرسال";
+    }catch(err){
+      showMsg(err.code==="auth/user-not-found"?"لا يوجد حساب بهذا البريد الإلكتروني":err.message||"تعذر إرسال الرابط");
+      btn.disabled=false;btn.textContent="إرسال رابط الاستعادة";
+    }
+  };
+}
+
 function register(){shell(`<section class="page container"><form class="form" id="register-form"><div class="eyebrow">NIVORA ACCOUNT</div><h2>إنشاء حساب جديد</h2><p class="muted">أنشئ حسابك كعميل للمتابعة والشراء.</p><div id="msg" class="message"></div><div class="form-row"><label>الاسم</label><input autocomplete="name" class="field" id="name" required></div><div class="form-row"><label>البريد الإلكتروني</label><input autocomplete="email" class="field" id="email" type="email" required></div><div class="form-row"><label>كلمة المرور</label><input autocomplete="new-password" class="field" id="pass" type="password" minlength="6" required></div><button class="btn-primary" id="register-submit" style="width:100%">إنشاء الحساب</button><div class="form-links"><a href="login.html">العودة لتسجيل الدخول</a></div></form></section>`);$("#register-form").onsubmit=async e=>{e.preventDefault();const btn=$("#register-submit");btn.disabled=true;btn.textContent="جارٍ إنشاء الحساب...";try{if(!window.NivoraFirebase?.enabled)throw new Error("Firebase غير مهيأ");let u=await window.NivoraFirebase.register($("#name").value.trim(),$("#email").value.trim(),$("#pass").value);set("nivora_user",{uid:u.uid,name:u.displayName,email:u.email,role:"customer"});location.href="account.html"}catch(err){showMsg(err.code==="auth/email-already-in-use"?"البريد مستخدم بالفعل":err.message);btn.disabled=false;btn.textContent="إنشاء الحساب"}}}
 async function account(){
   if(!window.NivoraFirebase?.enabled) return location.href="login.html";
@@ -75,27 +174,21 @@ async function account(){
   shell(`<section class="page container"><div class="page-title"><div class="eyebrow">MY ACCOUNT</div><h1>حسابي</h1></div><div class="stat-grid"><div class="stat"><span class="muted">الاسم</span><strong>${u.name||"—"}</strong></div><div class="stat"><span class="muted">البريد</span><strong style="font-size:16px">${u.email||"—"}</strong></div><div class="stat"><span class="muted">السلة</span><strong>${cart().reduce((a,x)=>a+x.qty,0)}</strong></div><div class="stat"><span class="muted">المفضلة</span><strong>${get("nivora_fav",[]).length}</strong></div></div><div class="panel"><h3>مرحباً بك في NIVORA</h3><p class="muted">يمكنك متابعة مشترياتك ومفضلاتك من هذا الحساب.</p><div class="toolbar"><a class="btn-primary" href="shop.html">متابعة التسوق</a><button class="btn" id="logout">تسجيل الخروج</button></div></div></section>`);
   $("#logout").onclick=async()=>{await window.NivoraFirebase.logout();localStorage.removeItem("nivora_user");location.href="login.html"};
 }
-function cartPage(){let c=cart();let items=c.map(x=>({...x,p:products.find(p=>p.id===x.id)})).filter(x=>x.p);let total=items.reduce((a,x)=>a+x.p.price*x.qty,0);shell(`<section class="page container"><div class="page-title"><div class="eyebrow">SHOPPING BAG</div><h1>سلة المشتريات</h1></div>${items.length?`<div class="panel">${items.map(x=>`<div class="cart-item"><img src="${x.p.img}"><div><h3>${x.p.name}</h3><p class="muted">${money(x.p.price)}</p><div class="qty"><button class="btn" data-dec="${x.id}">−</button><b>${x.qty}</b><button class="btn" data-inc="${x.id}">+</button></div></div><strong class="price">${money(x.p.price*x.qty)}</strong></div>`).join("")}<div style="display:flex;justify-content:space-between;padding-top:20px"><b>الإجمالي</b><b class="price">${money(total)}</b></div><a class="btn-primary" style="display:inline-block;margin-top:15px" href="checkout.html">إتمام الطلب</a></div>`:`<div class="empty">السلة فارغة<br><a class="btn-primary" style="display:inline-block;margin-top:15px" href="shop.html">ابدأ التسوق</a></div>`}</section>`);$$("[data-inc]").forEach(b=>b.onclick=()=>{let a=cart(),i=a.find(x=>x.id===b.dataset.inc);i.qty++;saveCart(a);cartPage()});$$("[data-dec]").forEach(b=>b.onclick=()=>{let a=cart(),i=a.find(x=>x.id===b.dataset.dec);i.qty--;a=a.filter(x=>x.qty>0);saveCart(a);cartPage()})}
-function checkout(){if(!cart().length)return location.href="cart.html";shell(`<section class="page container"><form class="form" id="checkout-form"><div class="eyebrow">CHECKOUT</div><h2>إتمام الطلب</h2><div id="msg" class="message"></div><div class="form-row"><label>الاسم الكامل</label><input class="field" id="customer-name" required></div><div class="form-row"><label>رقم الهاتف</label><input class="field" id="customer-phone" required></div><div class="form-row"><label>العنوان</label><textarea class="field" id="customer-address" rows="3" required></textarea></div><div class="form-row"><label>طريقة الدفع</label><select class="field" id="payment-method"><option value="cod">الدفع عند الاستلام</option><option value="bank">تحويل بنكي</option></select></div><button class="btn-primary" style="width:100%">تأكيد الطلب</button></form></section>`);$("#checkout-form").onsubmit=async e=>{e.preventDefault();try{if(!window.NivoraFirebase?.enabled)throw new Error("أكمل إعداد Firebase أولاً");if(!window.NivoraFirebase.auth.currentUser)return location.href="login.html";const items=cart().map(x=>{const p=products.find(p=>p.id===x.id);return {...x,name:p?.name,price:Number(p?.price||0),costPrice:Number(p?.costPrice||0),sourceUrl:p?.sourceUrl||"",source:p?.source||"catalog"}});const total=items.reduce((a,x)=>a+x.price*x.qty,0);const id=await window.NivoraFirebase.createOrder({items,total,currency:"EGP",status:"جديد",paymentStatus:"pending",paymentMethod:$("#payment-method").value,customer:{name:$("#customer-name").value.trim(),phone:$("#customer-phone").value.trim(),address:$("#customer-address").value.trim()}});set("last_order_id",id);localStorage.removeItem("nivora_cart");location.href="order-success.html"}catch(err){showMsg(err.message)}}}
+function cartPage(){let c=cart();let items=c.map(x=>({...x,p:products.find(p=>p.id===x.id)})).filter(x=>x.p);let total=items.reduce((a,x)=>a+x.p.price*x.qty,0);shell(`<section class="page container"><div class="page-title"><div class="eyebrow">SHOPPING BAG</div><h1>سلة المشتريات</h1></div>${items.length?`<div class="panel">${items.map(x=>`<div class="cart-item"><img src="${esc(x.p.img)}"><div><h3>${esc(x.p.name)}</h3><p class="muted">${money(x.p.price)}</p><div class="qty"><button class="btn" data-dec="${esc(x.id)}">−</button><b>${x.qty}</b><button class="btn" data-inc="${esc(x.id)}">+</button></div></div><strong class="price">${money(x.p.price*x.qty)}</strong></div>`).join("")}<div style="display:flex;justify-content:space-between;padding-top:20px"><b>الإجمالي</b><b class="price">${money(total)}</b></div><a class="btn-primary" style="display:inline-block;margin-top:15px" href="checkout.html">إتمام الطلب</a></div>`:`<div class="empty">السلة فارغة<br><a class="btn-primary" style="display:inline-block;margin-top:15px" href="shop.html">ابدأ التسوق</a></div>`}</section>`);$$("[data-inc]").forEach(b=>b.onclick=()=>{let a=cart(),i=a.find(x=>x.id===b.dataset.inc),p=products.find(x=>x.id===b.dataset.inc);if(!i||!p)return;if(i.qty>=Number(p.stock||0))return toast("لا يمكن تجاوز الكمية المتاحة");i.qty++;saveCart(a);cartPage()});$$("[data-dec]").forEach(b=>b.onclick=()=>{let a=cart(),i=a.find(x=>x.id===b.dataset.dec);if(!i)return;i.qty--;a=a.filter(x=>x.qty>0);saveCart(a);cartPage()})}
+function checkout(){if(!cart().length)return location.href="cart.html";shell(`<section class="page container"><form class="form" id="checkout-form"><div class="eyebrow">CHECKOUT</div><h2>إتمام الطلب</h2><div id="msg" class="message"></div><div class="form-row"><label>الاسم الكامل</label><input class="field" id="customer-name" required></div><div class="form-row"><label>رقم الهاتف</label><input class="field" id="customer-phone" required></div><div class="form-row"><label>العنوان</label><textarea class="field" id="customer-address" rows="3" required></textarea></div><div class="form-row"><label>طريقة الدفع</label><select class="field" id="payment-method"><option value="cod">الدفع عند الاستلام</option><option value="bank">تحويل بنكي</option></select></div><button class="btn-primary" style="width:100%">تأكيد الطلب</button></form></section>`);$("#checkout-form").onsubmit=async e=>{e.preventDefault();try{if(!window.NivoraFirebase?.enabled)throw new Error("أكمل إعداد Firebase أولاً");if(!window.NivoraFirebase.auth.currentUser)return location.href="login.html";const items=cart().map(x=>{const p=products.find(p=>p.id===x.id);if(!p)throw new Error("أحد المنتجات في السلة لم يعد متاحاً");if(Number(x.qty)>Number(p.stock||0))throw new Error(`الكمية المطلوبة من ${p.name} غير متاحة حالياً`);return {...x,name:p.name,price:Number(p.price||0),costPrice:Number(p.costPrice||0),sourceUrl:p.sourceUrl||"",source:p.source||"catalog"}});const total=items.reduce((a,x)=>a+x.price*x.qty,0);const id=await window.NivoraFirebase.createOrder({items,total,currency:"EGP",status:"جديد",paymentStatus:"pending",paymentMethod:$("#payment-method").value,customer:{name:$("#customer-name").value.trim(),phone:$("#customer-phone").value.trim(),address:$("#customer-address").value.trim()}});set("last_order_id",id);localStorage.removeItem("nivora_cart");location.href="order-success.html"}catch(err){showMsg(err.message)}}}
 async function admin(){
-  const cached=get("nivora_admin",null);
   const api=window.NivoraFirebase || await window.NivoraFirebaseReady;
   if(!api?.enabled)return simplePage("لوحة الإدارة","تعذر تهيئة Firebase.");
   const user=api.auth?.currentUser || await api.currentUser();
   if(!user)return location.href="admin-login.html";
-  let role=cached?.uid===user.uid?cached.role:null;
-  // Render the shell immediately; never wait for the orders query before showing the dashboard.
-  if(!["admin","manager","employee"].includes(role)){
-    try{ role=await api.getRole(); }catch(err){ console.error(err); return showAdminError(err); }
-  }
+  let role=null;
+  // Never trust a localStorage role for authorization; Firestore is the source of truth.
+  try{ role=await api.getRole(); }catch(err){ console.error(err); return showAdminError(err); }
   if(!["admin","manager","employee"].includes(role))return location.href="admin-login.html";
-  shell(`<section class="admin-dashboard"><div class="container"><div class="admin-hero"><div><div class="eyebrow">NIVORA ${String(role).toUpperCase()}</div><h1>لوحة ${role==="employee"?"الموظفين":"الإدارة"}</h1><p class="muted">مرحباً ${user.displayName||user.email}. الصلاحية الحالية: ${role}.</p></div><a class="btn" href="index.html">العودة للمتجر</a></div><div class="stat-grid"><div class="stat"><span class="muted">المنتجات</span><strong>${products.length}</strong></div><div class="stat"><span class="muted">الطلبات</span><strong id="admin-orders-count">—</strong></div><div class="stat"><span class="muted">المبيعات</span><strong id="admin-sales-total">—</strong></div><div class="stat"><span class="muted">الصلاحية</span><strong style="font-size:20px">${role}</strong></div></div><div class="admin-layout"><aside class="admin-side"><a class="active" href="admin.html">الرئيسية</a><a href="admin-products.html">المنتجات</a><a href="admin-import.html">استيراد المنتجات</a><a href="admin-sourcing.html">طلبات التوفير</a><a href="admin-analytics.html">ذكاء العملاء</a><a href="admin-orders.html">الطلبات</a><a href="admin-customers.html">العملاء</a><a href="admin-import.html">استيراد المنتجات</a><a href="admin-sourcing.html">طلبات التوفير</a><a href="admin-offers.html">العروض والروابط</a><a href="admin-inventory.html">المخزون</a><a href="admin-accounting.html">المحاسبة</a><a href="admin-reports.html">التقارير</a><a href="admin-settings.html">الإعدادات</a><a href="#" id="admin-out">تسجيل الخروج</a></aside><div class="panel"><div class="section-head"><div><div class="eyebrow">LIVE OVERVIEW</div><h2>آخر الطلبات</h2></div><span id="admin-data-status" class="muted">جاري تحميل البيانات…</span></div><div id="admin-orders-area"><div class="admin-loading"><i></i><span>جاري تحميل الطلبات</span></div></div></div></div></div></section>`);
+  shell(`<section class="admin-dashboard"><div class="container"><div class="admin-hero"><div><div class="eyebrow">NIVORA ${String(role).toUpperCase()}</div><h1>لوحة ${role==="employee"?"الموظفين":"الإدارة"}</h1><p class="muted">مرحباً ${user.displayName||user.email}. الصلاحية الحالية: ${role}.</p></div><a class="btn" href="index.html">العودة للمتجر</a></div><div class="stat-grid"><div class="stat"><span class="muted">المنتجات</span><strong>${products.length}</strong></div><div class="stat"><span class="muted">الطلبات</span><strong id="admin-orders-count">—</strong></div><div class="stat"><span class="muted">المبيعات</span><strong id="admin-sales-total">—</strong></div><div class="stat"><span class="muted">الصلاحية</span><strong style="font-size:20px">${role}</strong></div></div><div class="admin-layout"><aside class="admin-side"><a class="active" href="admin.html">الرئيسية</a><a href="admin-products.html">المنتجات</a><a href="admin-import.html">استيراد المنتجات</a><a href="admin-sourcing.html">طلبات التوفير</a><a href="admin-analytics.html">ذكاء العملاء</a><a href="admin-orders.html">الطلبات</a><a href="admin-customers.html">العملاء</a><a href="admin-offers.html">العروض والروابط</a><a href="admin-inventory.html">المخزون</a><a href="admin-accounting.html">المحاسبة</a><a href="admin-reports.html">التقارير</a><a href="admin-settings.html">الإعدادات</a><a href="#" id="admin-out">تسجيل الخروج</a></aside><div class="panel"><div class="section-head"><div><div class="eyebrow">LIVE OVERVIEW</div><h2>آخر الطلبات</h2></div><span id="admin-data-status" class="muted">جاري تحميل البيانات…</span></div><div id="admin-orders-area"><div class="admin-loading"><i></i><span>جاري تحميل الطلبات</span></div></div></div></div></div></section>`);
   $("#admin-out").onclick=async e=>{e.preventDefault();await api.logout();localStorage.removeItem("nivora_admin");localStorage.removeItem("nivora_user");location.href="login.html"};
-  // Verify the cached role in the background so UI is fast without weakening Firestore security rules.
   try{
-    const verifiedRole=await api.getRole();
-    if(!["admin","manager","employee"].includes(verifiedRole))return location.href="admin-login.html";
-    if(verifiedRole!==role){localStorage.setItem("nivora_admin",JSON.stringify({uid:user.uid,email:user.email,role:verifiedRole}));}
+    localStorage.setItem("nivora_admin",JSON.stringify({uid:user.uid,email:user.email,role}));
     let orders=[];
     try{orders=await api.listOrders(200);}catch(e){console.warn("orders read failed",e);$("#admin-data-status").textContent="تعذر تحميل الطلبات";$("#admin-orders-area").innerHTML=`<div class="message show">تعذر تحميل الطلبات: ${e.code==="permission-denied"?"صلاحيات Firestore تمنع القراءة.":e.message}</div>`;return;}
     const sales=orders.filter(o=>o.status!=="ملغي").reduce((a,o)=>a+Number(o.total||0),0);
@@ -204,7 +297,7 @@ async function adminOffers(){
   const user=await window.NivoraFirebase.currentUser();
   if(!user || !(await window.NivoraFirebase.isAdmin()))return location.href="admin-login.html";
   let offers=[];try{offers=await window.NivoraFirebase.listOffers(200)}catch(e){console.error(e)}
-  shell(`<section class="page container"><div class="page-title"><div class="eyebrow">NIVORA ADMIN</div><h1>إدارة العروض والروابط</h1><p class="muted">ألصق رابط المنتج من المواقع المعتمدة، ثم راجع البيانات وانشر العرض.</p></div><div class="panel"><form id="offer-form"><div class="form-row"><label>رابط المنتج</label><input class="field" id="offer-url" type="url" required placeholder="https://..."></div><div class="form-row"><label>المصدر</label><select class="field" id="offer-source"><option>تلقائي</option><option>Amazon</option><option>AliExpress</option><option>Alibaba</option><option>Noon</option><option>رابط خارجي</option></select></div><div class="form-row"><label>اسم العرض</label><input class="field" id="offer-title" required></div><div class="form-row"><label>رابط الصورة</label><input class="field" id="offer-image" type="url" placeholder="https://..."></div><div class="toolbar"><input class="field" id="offer-price" type="number" min="0" step="0.01" placeholder="السعر"><input class="field" id="offer-old" type="number" min="0" step="0.01" placeholder="السعر قبل الخصم"></div><div class="form-row"><label>الوصف</label><textarea class="field" id="offer-description" rows="3"></textarea></div><button class="btn-primary" id="offer-save">نشر العرض</button><div id="offer-msg" class="message"></div></form></div><div class="panel" style="margin-top:20px"><h2>العروض المنشورة</h2><div class="table-wrap"><table class="table"><tr><th>العرض</th><th>المصدر</th><th>السعر</th><th>الرابط</th><th>الإجراء</th></tr>${offers.map(o=>`<tr><td>${o.title||'—'}</td><td>${o.source||'—'}</td><td>${o.price?money(Number(o.price)):'—'}</td><td><a class="btn" href="${o.url}" target="_blank" rel="noopener">فتح</a></td><td><button class="btn" data-delete-offer="${o.id}">حذف</button></td></tr>`).join('')||`<tr><td colspan="5">لا توجد عروض منشورة.</td></tr>`}</table></div></div></section>`);
+  shell(`<section class="page container"><div class="page-title"><div class="eyebrow">NIVORA ADMIN</div><h1>إدارة العروض والروابط</h1><p class="muted">ألصق رابط المنتج من المواقع المعتمدة، ثم راجع البيانات وانشر العرض.</p></div><div class="panel"><form id="offer-form"><div class="form-row"><label>رابط المنتج</label><input class="field" id="offer-url" type="url" required placeholder="https://..."></div><div class="form-row"><label>المصدر</label><select class="field" id="offer-source"><option>تلقائي</option><option>Amazon</option><option>AliExpress</option><option>Alibaba</option><option>Noon</option><option>رابط خارجي</option></select></div><div class="form-row"><label>اسم العرض</label><input class="field" id="offer-title" required></div><div class="form-row"><label>رابط الصورة</label><input class="field" id="offer-image" type="url" placeholder="https://..."></div><div class="toolbar"><input class="field" id="offer-price" type="number" min="0" step="0.01" placeholder="السعر"><input class="field" id="offer-old" type="number" min="0" step="0.01" placeholder="السعر قبل الخصم"></div><div class="form-row"><label>الوصف</label><textarea class="field" id="offer-description" rows="3"></textarea></div><button class="btn-primary" id="offer-save">نشر العرض</button><div id="offer-msg" class="message"></div></form></div><div class="panel" style="margin-top:20px"><h2>العروض المنشورة</h2><div class="table-wrap"><table class="table"><tr><th>العرض</th><th>المصدر</th><th>السعر</th><th>الرابط</th><th>الإجراء</th></tr>${offers.map(o=>`<tr><td>${o.title||'—'}</td><td>${o.source||'—'}</td><td>${o.price?money(Number(o.price)):'—'}</td><td><a class="btn" href="${esc(safeExternalUrl(o.url||"#"))}" target="_blank" rel="noopener noreferrer nofollow">فتح</a></td><td><button class="btn" data-delete-offer="${o.id}">حذف</button></td></tr>`).join('')||`<tr><td colspan="5">لا توجد عروض منشورة.</td></tr>`}</table></div></div></section>`);
   $("#offer-url").oninput=()=>{if($("#offer-source").value==="تلقائي"){$("#offer-source").title=detectOfferSource($("#offer-url").value)}};
   $("#offer-form").onsubmit=async e=>{e.preventDefault();const btn=$("#offer-save");btn.disabled=true;btn.textContent="جارٍ الحفظ...";try{const url=$("#offer-url").value.trim();const source=$("#offer-source").value==="تلقائي"?detectOfferSource(url):$("#offer-source").value;await window.NivoraFirebase.saveOffer({url,source,title:$("#offer-title").value.trim(),image:$("#offer-image").value.trim(),price:Number($("#offer-price").value||0),oldPrice:Number($("#offer-old").value||0),description:$("#offer-description").value.trim(),createdBy:user.uid});location.reload()}catch(err){$("#offer-msg").textContent=err.code==="permission-denied"?"تم رفض العملية من Firestore. انشر firestore.rules الجديدة.":err.message;$("#offer-msg").classList.add("show");btn.disabled=false;btn.textContent="نشر العرض"}};
   $$('[data-delete-offer]').forEach(b=>b.onclick=async()=>{if(!confirm("حذف هذا العرض؟"))return;try{await window.NivoraFirebase.deleteOffer(b.dataset.deleteOffer);location.reload()}catch(e){alert(e.message)}});
@@ -254,7 +347,7 @@ async function init(){
   else if(f==="order-success.html") simplePage("تم استلام طلبك","شكراً لك. تم حفظ الطلب بنجاح.");
   else if(f==="order-tracking.html") orderTracking();
   else if(f==="search.html") shop();
-  else if(f==="forgot-password.html") simplePage("استعادة كلمة المرور","استخدم صفحة تسجيل الدخول لإعادة تعيين كلمة المرور.");
+  else if(f==="forgot-password.html") forgotPassword();
   else if(f==="account-orders.html") accountOrders();
   else if(f==="account-wishlist.html") simplePage("المفضلة",`عدد المنتجات في المفضلة: ${get("nivora_fav",[]).length}`);
   else if(f==="about.html") simplePage("عن NIVORA","NIVORA SILVER متجر فاخر.");
