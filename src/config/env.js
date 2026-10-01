@@ -14,5 +14,9 @@ module.exports = {
     user: process.env.SMTP_USER || "",
     pass: process.env.SMTP_PASS || ""
   },
-  importTimeoutMs: Number(process.env.IMPORT_TIMEOUT_MS || 15000)
+  importTimeoutMs: Number(process.env.IMPORT_TIMEOUT_MS || 30000),
+  openaiApiKey: process.env.OPENAI_API_KEY || "",
+  openaiVisionModel: process.env.OPENAI_VISION_MODEL || "gpt-5.6",
+  openaiImageModel: process.env.OPENAI_IMAGE_MODEL || "gpt-image-1",
+  firebaseStorageBucket: process.env.FIREBASE_STORAGE_BUCKET || ""
 };
