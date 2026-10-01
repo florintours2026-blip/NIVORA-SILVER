@@ -11,7 +11,7 @@ const app = express();
 
 app.use(helmet());
 app.use(cors({ origin: env.corsOrigin }));
-app.use(express.json({ limit: "2mb" }));
+app.use(express.json({ limit: "10mb" }));
 app.use(morgan("combined"));
 
 app.get("/", (req, res) => res.json({
